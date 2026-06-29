@@ -11,7 +11,9 @@
     "worker:deploy": "wrangler deploy",
     "db:create": "wrangler d1 create red-raider-loyalty",
     "db:init": "wrangler d1 execute red-raider-loyalty --file=worker/schema.sql",
-    "db:seed": "wrangler d1 execute red-raider-loyalty --file=worker/seed.sql"
+    "db:seed": "wrangler d1 execute red-raider-loyalty --file=worker/seed.sql",
+    "db:init:remote": "wrangler d1 execute red-raider-loyalty --remote --file=worker/schema.sql",
+    "db:seed:remote": "wrangler d1 execute red-raider-loyalty --remote --file=worker/seed.sql"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
