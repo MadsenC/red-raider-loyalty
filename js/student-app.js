@@ -5,6 +5,11 @@ let events = [];
 let activity = null;
 let currentTab = 'home';
 
+function studentLogout() {
+  localStorage.removeItem('rr_token');
+  window.location.href = 'login.html';
+}
+
 /* ─── Boot ─── */
 (async () => {
   me = await requireLogin();

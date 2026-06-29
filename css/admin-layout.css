@@ -88,6 +88,29 @@ html, body {
   border-left-color: var(--ttu-red);
 }
 
+/* ── Sidebar Logout ── */
+.sidebar-logout {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 0 16px var(--sp-2);
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.45);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.sidebar-logout:hover {
+  background: rgba(204,0,0,0.15);
+  border-color: rgba(204,0,0,0.3);
+  color: #FF8080;
+}
+
 /* ── Sidebar Footer (user info) ── */
 .sidebar-user {
   padding: var(--sp-4) var(--sp-5);

@@ -6,10 +6,19 @@
 
 const _base = () => (typeof window !== 'undefined' && window.API_BASE) || '';
 
-async function api(method, path, body) {
-  const token = localStorage.getItem('rr_token');
+/* Student uses 'rr_token', admin uses 'rr_admin_token' — independent sessions */
+function _tokenKey(adminScope) {
+  return adminScope ? 'rr_admin_token' : 'rr_token';
+}
+
+async function api(method, path, body, adminScope = false) {
+  const token = localStorage.getItem(_tokenKey(adminScope));
+  /* Fall back to student token if no admin token (e.g. cookie-based local dev) */
+  const fallback = !adminScope ? null : localStorage.getItem('rr_token');
+  const activeToken = token || fallback || null;
+
   const headers = { 'Content-Type': 'application/json' };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
+  if (activeToken) headers['Authorization'] = `Bearer ${activeToken}`;
 
   const opts = { method, headers, credentials: 'same-origin' };
   if (body) opts.body = JSON.stringify(body);
@@ -21,15 +30,17 @@ async function api(method, path, body) {
 }
 
 const API = {
-  get:  (path)        => api('GET',    path),
-  post: (path, body)  => api('POST',   path, body),
-  put:  (path, body)  => api('PUT',    path, body),
-  del:  (path)        => api('DELETE', path),
+  get:  (path, admin)        => api('GET',    path, null,  admin),
+  post: (path, body, admin)  => api('POST',   path, body,  admin),
+  put:  (path, body, admin)  => api('PUT',    path, body,  admin),
+  del:  (path, admin)        => api('DELETE', path, null,  admin),
 
   auth: {
-    me:     ()         => API.get('/api/auth/me'),
-    login:  (e, p)     => API.post('/api/auth/login',  { erider: e, password: p }),
-    logout: ()         => API.post('/api/auth/logout').finally(() => localStorage.removeItem('rr_token')),
+    me:          ()    => api('GET',  '/api/auth/me',     null,  false),
+    meAdmin:     ()    => api('GET',  '/api/auth/me',     null,  true),
+    login:       (e,p) => API.post('/api/auth/login',  { erider: e, password: p }),
+    logout:      ()    => API.post('/api/auth/logout').finally(() => localStorage.removeItem('rr_token')),
+    logoutAdmin: ()    => API.post('/api/auth/logout').finally(() => localStorage.removeItem('rr_admin_token')),
   },
   student: {
     events:   ()       => API.get('/api/student/events'),
@@ -41,45 +52,55 @@ const API = {
     redeem:   (id)     => API.post(`/api/student/redeem/${id}`),
   },
   admin: {
-    events:         ()     => API.get('/api/admin/events'),
-    createEvent:    (b)    => API.post('/api/admin/events', b),
-    updateEvent:    (id,b) => API.put(`/api/admin/events/${id}`, b),
-    dashboard:      (id)   => API.get(`/api/admin/events/${id}/dashboard`),
-    runSelection:   (id)   => API.post(`/api/admin/events/${id}/run-selection`),
-    noshowSweep:    (id)   => API.post(`/api/admin/events/${id}/noshow-sweep`),
-    students:       (q)    => API.get(`/api/admin/students${q ? '?q='+encodeURIComponent(q) : ''}`),
-    disputes:       (s)    => API.get(`/api/admin/disputes?status=${s||'pending'}`),
-    clearDispute:   (id)   => API.post(`/api/admin/disputes/${id}/clear`),
-    upholdDispute:  (id)   => API.post(`/api/admin/disputes/${id}/uphold`),
-    checkin:        (b)    => API.post('/api/admin/checkin', b),
-    rewards:        ()     => API.get('/api/admin/rewards'),
-    createReward:   (b)    => API.post('/api/admin/rewards', b),
-    updateReward:   (id,b) => API.put(`/api/admin/rewards/${id}`, b),
-    config:         ()     => API.get('/api/admin/config'),
-    saveConfig:     (b)    => API.put('/api/admin/config', b),
+    events:         ()     => api('GET',  '/api/admin/events',                        null, true),
+    createEvent:    (b)    => api('POST', '/api/admin/events',                        b,    true),
+    updateEvent:    (id,b) => api('PUT',  `/api/admin/events/${id}`,                  b,    true),
+    dashboard:      (id)   => api('GET',  `/api/admin/events/${id}/dashboard`,         null, true),
+    runSelection:   (id)   => api('POST', `/api/admin/events/${id}/run-selection`,     null, true),
+    noshowSweep:    (id)   => api('POST', `/api/admin/events/${id}/noshow-sweep`,      null, true),
+    students:       (q)    => api('GET',  `/api/admin/students${q ? '?q='+encodeURIComponent(q) : ''}`, null, true),
+    disputes:       (s)    => api('GET',  `/api/admin/disputes?status=${s||'pending'}`,null, true),
+    clearDispute:   (id)   => api('POST', `/api/admin/disputes/${id}/clear`,           null, true),
+    upholdDispute:  (id)   => api('POST', `/api/admin/disputes/${id}/uphold`,          null, true),
+    checkin:        (b)    => api('POST', '/api/admin/checkin',                        b,    true),
+    rewards:        ()     => api('GET',  '/api/admin/rewards',                        null, true),
+    createReward:   (b)    => api('POST', '/api/admin/rewards',                        b,    true),
+    updateReward:   (id,b) => api('PUT',  `/api/admin/rewards/${id}`,                  b,    true),
+    config:         ()     => api('GET',  '/api/admin/config',                         null, true),
+    saveConfig:     (b)    => api('PUT',  '/api/admin/config',                         b,    true),
   },
 };
 
 /* Guard: redirect to login if not authenticated */
 async function requireLogin(adminOnly = false) {
   try {
-    const me = await API.auth.me();
+    const me = adminOnly ? await API.auth.meAdmin() : await API.auth.me();
     if (adminOnly && me.role !== 'admin') {
-      window.location.href = _loginUrl();
+      window.location.href = _adminLoginUrl();
       return null;
     }
     return me;
   } catch (e) {
-    window.location.href = _loginUrl();
+    window.location.href = adminOnly ? _adminLoginUrl() : _loginUrl();
     return null;
   }
 }
 
 function _loginUrl() {
-  /* Works on localhost AND GitHub Pages (/red-raider-loyalty/login.html) */
   const parts = location.pathname.split('/');
-  const base  = parts.slice(0, parts.lastIndexOf(parts.find(p => p.endsWith('.html')) || '') || parts.length - 1).join('/');
-  return (base || '') + '/login.html';
+  const htmlIdx = parts.findIndex(p => p.endsWith('.html'));
+  const base = htmlIdx > 0 ? parts.slice(0, htmlIdx).join('/') : '';
+  /* Student login is always at root of the site */
+  const root = base.replace(/\/Admin$/, '');
+  return (root || '') + '/login.html';
+}
+
+function _adminLoginUrl() {
+  const parts = location.pathname.split('/');
+  const htmlIdx = parts.findIndex(p => p.endsWith('.html'));
+  const base = htmlIdx > 0 ? parts.slice(0, htmlIdx).join('/') : '';
+  const root = base.replace(/\/Admin$/, '');
+  return (root || '') + '/Admin/login.html';
 }
 
 function toast(msg, type = 'default') {

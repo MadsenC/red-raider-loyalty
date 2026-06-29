@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Sign In — Red Raider Loyalty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      background: #0D0D0F;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #F4F4F6;
+    }
+
+    /* Subtle grid texture */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(204,0,0,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(204,0,0,0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none;
+    }
+
+    /* Red glow top-center */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(ellipse at center, rgba(204,0,0,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 420px;
+      background: #141417;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 40px 36px 36px;
+      box-shadow: 0 0 0 1px rgba(204,0,0,0.08), 0 32px 64px -16px rgba(0,0,0,0.6);
+    }
+
+    .top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(204,0,0,0.12);
+      border: 1px solid rgba(204,0,0,0.2);
+      border-radius: 99px;
+      padding: 5px 12px 5px 8px;
+      margin-bottom: 28px;
+    }
+    .top-badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #CC0000;
+      box-shadow: 0 0 6px #CC0000;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+    }
+    .top-badge-text {
+      font-size: 11px;
+      font-weight: 700;
+      color: #CC0000;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+    .logo-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: #CC0000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .logo-text {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #F4F4F6;
+    }
+    .logo-sub {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      margin-top: 1px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #F4F4F6;
+      margin-bottom: 6px;
+      margin-top: 28px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.45);
+      font-weight: 500;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #F4F4F6;
+      background: rgba(255,255,255,0.05);
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      margin-bottom: 18px;
+    }
+    input:focus {
+      border-color: #CC0000;
+      background: rgba(204,0,0,0.05);
+    }
+    input::placeholder { color: rgba(255,255,255,0.2); }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      background: #CC0000;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: opacity 0.15s, transform 0.1s;
+      letter-spacing: -0.01em;
+    }
+    button[type="submit"]:hover { opacity: 0.88; }
+    button[type="submit"]:active { transform: scale(0.99); }
+    button[type="submit"]:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .error-msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: rgba(204,0,0,0.12);
+      border: 1px solid rgba(204,0,0,0.25);
+      color: #FF6B6B;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .student-link {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+      font-weight: 500;
+    }
+    .student-link a {
+      color: rgba(255,255,255,0.55);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .student-link a:hover { color: #F4F4F6; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top-badge">
+      <div class="top-badge-dot"></div>
+      <span class="top-badge-text">Staff Access</span>
+    </div>
+
+    <div class="logo">
+      <div class="logo-badge">RR</div>
+      <div>
+        <div class="logo-text">Red Raider Loyalty</div>
+        <div class="logo-sub">Admin Console</div>
+      </div>
+    </div>
+
+    <h1>Sign in</h1>
+    <p class="subtitle">Texas Tech Athletics staff only. Your credentials are separate from student accounts.</p>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <label for="erider">eRaider Username</label>
+      <input type="text" id="erider" name="erider" placeholder="username" autocomplete="username" autocapitalize="none" autofocus>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password">
+
+      <button type="submit" id="submitBtn">Sign in to Admin</button>
+    </form>
+
+    <div class="error-msg" id="errorMsg"></div>
+
+    <div class="student-link">
+      Looking for the student app? <a href="../login.html">Sign in here →</a>
+    </div>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const erider   = document.getElementById('erider').value.trim();
+      const password = document.getElementById('password').value;
+      const btn      = document.getElementById('submitBtn');
+      const errEl    = document.getElementById('errorMsg');
+
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+
+      try {
+        const base = (typeof window !== 'undefined' && window.API_BASE) || '';
+        const res  = await fetch(base + '/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ erider, password }),
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          errEl.textContent = data.error || 'Sign-in failed.';
+          errEl.style.display = 'block';
+        } else if (data.role !== 'admin') {
+          errEl.textContent = 'This account does not have admin access.';
+          errEl.style.display = 'block';
+        } else {
+          if (data.token) localStorage.setItem('rr_admin_token', data.token);
+          const here = location.pathname.replace(/\/login\.html$/, '') || '/Admin';
+          window.location.href = here + '/dashboard.html';
+        }
+      } catch {
+        errEl.textContent = 'Network error. Try again.';
+        errEl.style.display = 'block';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Sign in to Admin';
+    }
+  </script>
+</body>
+</html>

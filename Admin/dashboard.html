@@ -48,6 +48,7 @@
         No-Show Review
       </a>
     </nav>
+    <button class="sidebar-logout" onclick="adminLogout()">Sign out</button>
     <div class="sidebar-user">
       <div class="sidebar-user-name">Madsen Cooper</div>
       <div class="sidebar-user-role">Promotion &amp; Fan Engagement</div>
@@ -344,6 +345,12 @@
       await loadDashboard(currentEventId);
       toast('Stats refreshed.');
     });
+  </script>
+  <script>
+    function adminLogout() {
+      localStorage.removeItem("rr_admin_token");
+      window.location.href = "login.html";
+    }
   </script>
 </body>
 </html>
