@@ -7,7 +7,7 @@ const app = new Hono();
 
 /* ── CORS ── */
 app.use('/api/*', cors({
-  origin: ['https://MadsenC.github.io', 'http://localhost:3000', 'http://localhost:8787', 'http://127.0.0.1:3000'],
+  origin: ['https://madsenc.github.io', 'http://localhost:3000', 'http://localhost:8787', 'http://127.0.0.1:3000'],
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: false,
