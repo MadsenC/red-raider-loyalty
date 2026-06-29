@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Red Raider Loyalty — Sign In</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      background: #F4F4F6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: #141417;
+    }
+    .card {
+      width: 100%;
+      max-width: 400px;
+      background: #fff;
+      border: 1px solid #E7E7EB;
+      border-radius: 28px;
+      padding: 36px 32px 32px;
+      box-shadow: 0 1px 2px rgba(20,20,23,0.04), 0 20px 40px -20px rgba(20,20,23,0.14);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .logo-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #CC0000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+    }
+    .logo-text {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #6B6B72;
+      font-weight: 500;
+      margin-bottom: 28px;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: #141417;
+      margin-bottom: 7px;
+    }
+    input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid #E7E7EB;
+      border-radius: 13px;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #141417;
+      background: #F9F9FB;
+      outline: none;
+      transition: border-color 0.15s;
+      margin-bottom: 16px;
+    }
+    input:focus { border-color: #CC0000; background: #fff; }
+    input::placeholder { color: #9A9AA2; }
+    button[type="submit"] {
+      width: 100%;
+      padding: 14px;
+      background: #CC0000;
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 4px;
+      transition: opacity 0.15s;
+    }
+    button[type="submit"]:hover { opacity: 0.9; }
+    button[type="submit"]:disabled { opacity: 0.5; cursor: not-allowed; }
+    .error-msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: #FBE9E9;
+      color: #CC0000;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .fee-msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: #F0F0F3;
+      color: #6B6B72;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .footer-note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #9A9AA2;
+      text-align: center;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">
+      <div class="logo-badge">RR</div>
+      <div class="logo-text">Athletics Rewards</div>
+    </div>
+    <h1>Sign in</h1>
+    <p class="subtitle">Use your eRaider credentials to continue.</p>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <label for="erider">eRaider Username</label>
+      <input type="text" id="erider" name="erider" placeholder="e.g. jsmith" autocomplete="username" autocapitalize="none">
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password">
+
+      <button type="submit" id="submitBtn">Sign in</button>
+    </form>
+
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="fee-msg" id="feeMsg">Your athletic fee isn't on file. <a href="/athleticfee.html" style="color:#CC0000;font-weight:700;">Learn more →</a></div>
+
+    <p class="footer-note">Texas Tech University Athletics · <a href="mailto:studentloyalty@ttu.edu" style="color:#CC0000;">studentloyalty@ttu.edu</a></p>
+  </div>
+
+  <script>
+    async function handleLogin(e) {
+      e.preventDefault();
+      const erider = document.getElementById('erider').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('submitBtn');
+      const errEl = document.getElementById('errorMsg');
+      const feeEl = document.getElementById('feeMsg');
+
+      errEl.style.display = 'none';
+      feeEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Signing in…';
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'same-origin',
+          body: JSON.stringify({ erider, password }),
+        });
+        const data = await res.json();
+
+        if (res.status === 403 && data.error === 'fee_required') {
+          feeEl.style.display = 'block';
+        } else if (!res.ok) {
+          errEl.textContent = data.error || 'Sign-in failed.';
+          errEl.style.display = 'block';
+        } else {
+          window.location.href = data.role === 'admin' ? '/Admin/dashboard.html' : '/';
+        }
+      } catch {
+        errEl.textContent = 'Network error. Try again.';
+        errEl.style.display = 'block';
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Sign in';
+    }
+  </script>
+</body>
+</html>

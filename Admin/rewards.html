@@ -169,43 +169,85 @@
     </div>
   </div>
 
-  <script src="../js/data.js"></script>
-  <script src="../js/admin.js"></script>
+  <script src="../js/api.js"></script>
   <script>
+    let editingRewardId = null;
+
+    (async () => {
+      const me = await requireLogin(true);
+      if (!me) return;
+      document.querySelector('.sidebar-user-name').textContent = me.name;
+      await loadRewards();
+    })();
+
+    async function loadRewards() {
+      const rewards = await API.admin.rewards();
+      const list = document.getElementById('rewards-list');
+      list.innerHTML = rewards.map(r => `
+        <div class="rewards-catalog-item" style="${r.active ? '' : 'opacity:0.6;'}">
+          <div>
+            <div style="font-weight:600;">${r.name}</div>
+            <div style="font-size:12px;color:var(--text-muted);">${r.category}</div>
+          </div>
+          <div style="font-size:14px;font-weight:700;">${r.points_cost.toLocaleString()} pts</div>
+          <span class="badge ${r.active ? 'badge-claimed' : 'badge-waitlisted'}">${r.active ? 'Active' : 'Inactive'}</span>
+          <div style="display:flex;gap:var(--sp-2);">
+            <button class="btn btn-ghost btn-sm" onclick="openEdit(${r.id})">Edit</button>
+            <button class="btn ${r.active ? 'btn-outline' : 'btn-primary'} btn-sm" onclick="toggleReward(${r.id},${r.active ? 1 : 0},'${r.name.replace(/'/g,"\\'")}')">
+              ${r.active ? 'Deactivate' : 'Activate'}
+            </button>
+          </div>
+        </div>`).join('');
+    }
+
     document.getElementById('new-reward-btn').addEventListener('click', () => {
+      editingRewardId = null;
       document.getElementById('reward-modal-title').textContent = 'Add Reward';
       document.getElementById('reward-form').reset();
       document.getElementById('reward-modal').classList.add('open');
     });
 
-    function editReward(btn) {
+    async function openEdit(id) {
+      const rewards = await API.admin.rewards();
+      const r = rewards.find(x => x.id === id);
+      if (!r) return;
+      editingRewardId = id;
       document.getElementById('reward-modal-title').textContent = 'Edit Reward';
+      document.getElementById('reward-name').value     = r.name;
+      document.getElementById('reward-category').value = r.category;
+      document.getElementById('reward-points').value   = r.points_cost;
+      document.getElementById('reward-status').value   = r.active ? 'active' : 'inactive';
       document.getElementById('reward-modal').classList.add('open');
     }
 
-    function toggleReward(btn, name) {
-      const isActive = btn.textContent.trim() === 'Deactivate';
-      btn.textContent = isActive ? 'Activate' : 'Deactivate';
-      const row = btn.closest('.rewards-catalog-item');
-      const badge = row.querySelector('.badge');
-      if (isActive) {
-        badge.className = 'badge badge-waitlisted';
-        badge.textContent = 'Inactive';
-        row.style.opacity = '0.6';
-        btn.className = 'btn btn-primary btn-sm';
-      } else {
-        badge.className = 'badge badge-claimed';
-        badge.textContent = 'Active';
-        row.style.opacity = '1';
-        btn.className = 'btn btn-outline btn-sm';
-      }
-      showAdminToast(`"${name}" ${isActive ? 'deactivated' : 'activated'}.`);
+    async function toggleReward(id, currentActive, name) {
+      try {
+        const rewards = await API.admin.rewards();
+        const r = rewards.find(x => x.id === id);
+        if (!r) return;
+        await API.admin.updateReward(id, { name: r.name, category: r.category, points_cost: r.points_cost, active: !currentActive });
+        toast(`"${name}" ${currentActive ? 'deactivated' : 'activated'}.`);
+        await loadRewards();
+      } catch(e) { toast(e.message, 'error'); }
     }
 
-    function saveReward() {
-      document.getElementById('reward-modal').classList.remove('open');
-      showAdminToast('Reward saved.');
+    async function saveReward() {
+      const body = {
+        name:        document.getElementById('reward-name').value,
+        category:    document.getElementById('reward-category').value,
+        points_cost: Number(document.getElementById('reward-points').value),
+        active:      document.getElementById('reward-status').value === 'active',
+      };
+      try {
+        if (editingRewardId) await API.admin.updateReward(editingRewardId, body);
+        else                 await API.admin.createReward(body);
+        document.getElementById('reward-modal').classList.remove('open');
+        toast('Reward saved.');
+        await loadRewards();
+      } catch(e) { toast(e.data?.error || e.message, 'error'); }
     }
+
+    document.querySelector('.modal-footer .btn-primary').addEventListener('click', saveReward);
   </script>
 </body>
 </html>

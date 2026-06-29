@@ -2,169 +2,296 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Red Raider Loyalty</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Athletics Rewards</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/student-layout.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    ::-webkit-scrollbar { width: 0; height: 0; }
+    @keyframes rrfade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      background: #F4F4F6;
+      color: #141417;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    #appHeader {
+      flex: 0 0 auto;
+      padding: 16px 20px 0;
+      background: #F4F4F6;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-row { display: flex; align-items: center; justify-content: space-between; }
+    .header-left { display: flex; align-items: center; gap: 10px; }
+    .rr-badge {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: #CC0000; color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px;
+    }
+    .header-title { font-size: 16px; font-weight: 800; letter-spacing: -0.01em; }
+    .header-right { display: flex; align-items: center; gap: 9px; }
+    .pts-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 11px; border-radius: 999px;
+      background: #fff; border: 1px solid #E7E7EB;
+      font-size: 12.5px; font-weight: 700;
+    }
+    .pts-chip .val { color: #CC0000; }
+    .pts-chip .lbl { color: #9A9AA2; font-weight: 600; }
+    .bell-btn {
+      width: 38px; height: 38px; border-radius: 11px;
+      background: #fff; border: 1px solid #E7E7EB;
+      display: flex; align-items: center; justify-content: center;
+      color: #141417; cursor: pointer; position: relative;
+    }
+    .bell-dot {
+      position: absolute; top: 8px; right: 9px;
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #CC0000; border: 2px solid #fff;
+    }
+
+    /* Tabs */
+    .tabs { display: flex; gap: 4px; margin-top: 14px; border-bottom: 1px solid #E7E7EB; }
+    .tab-btn {
+      flex: 1; background: none; border: none; cursor: pointer;
+      padding: 0; font-family: 'Hanken Grotesk', sans-serif;
+    }
+    .tab-label { font-size: 13.5px; font-weight: 700; color: #9A9AA2; padding-bottom: 10px; }
+    .tab-bar { height: 2.5px; border-radius: 3px; background: transparent; }
+    .tab-btn.active .tab-label { color: #141417; }
+    .tab-btn.active .tab-bar { background: #CC0000; }
+
+    /* Body */
+    #appBody { flex: 1 1 auto; overflow-y: auto; padding: 14px 20px 32px; }
+
+    /* Spinner */
+    .spinner {
+      width: 32px; height: 32px; border: 3px solid #E7E7EB;
+      border-top-color: #CC0000; border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 40px auto;
+    }
+
+    /* Cards */
+    .card {
+      background: #fff; border: 1px solid #E7E7EB;
+      border-radius: 24px; padding: 20px;
+      box-shadow: 0 1px 2px rgba(20,20,23,0.04), 0 16px 34px -22px rgba(20,20,23,0.1);
+    }
+
+    /* Points ring */
+    .ring-card {
+      background: #fff; border: 1px solid #E7E7EB;
+      border-radius: 26px; padding: 22px;
+      box-shadow: 0 1px 2px rgba(20,20,23,0.04), 0 16px 34px -22px rgba(20,20,23,0.16);
+    }
+    .ring-row { display: flex; align-items: center; gap: 20px; }
+    .ring-wrap { position: relative; flex: 0 0 auto; width: 118px; height: 118px; }
+    .ring-inner {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .ring-pts {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700; font-size: 29px; line-height: 1; letter-spacing: -0.02em;
+    }
+    .ring-lbl { font-size: 10px; font-weight: 700; letter-spacing: 0.16em; color: #9A9AA2; margin-top: 4px; }
+    .ring-info { flex: 1 1 auto; min-width: 0; }
+    .standing-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; color: #9A9AA2; }
+    .standing-rank { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-top: 5px; }
+    .standing-sub { font-size: 12.5px; color: #6B6B72; font-weight: 600; }
+    .last-game-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 9px; padding: 4px 9px; border-radius: 999px;
+      background: #FBE9E9; color: #CC0000; font-size: 12px; font-weight: 700;
+    }
+    .reward-progress { margin-top: 18px; padding-top: 16px; border-top: 1px solid #EFEFF2; }
+    .reward-row { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; font-weight: 700; }
+    .reward-pts { color: #9A9AA2; }
+    .progress-bar { height: 7px; border-radius: 4px; background: #EFEFF2; margin-top: 9px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 4px; background: #CC0000; }
+
+    /* Section headings */
+    .section-hd { display: flex; align-items: baseline; justify-content: space-between; margin: 24px 2px 12px; }
+    .section-hd h2 { font-size: 17px; font-weight: 700; letter-spacing: -0.01em; }
+    .section-hd a { font-size: 12.5px; font-weight: 600; color: #CC0000; text-decoration: none; cursor: pointer; }
+    .section-label { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: #9A9AA2; margin: 22px 2px 10px; }
+    .section-label.red { color: #CC0000; }
+
+    /* Horizontal scroll events */
+    .events-scroll { display: flex; gap: 12px; overflow-x: auto; margin: 0 -20px; padding: 2px 20px 6px; }
+    .event-chip { flex: 0 0 auto; width: 158px; background: #fff; border: 1px solid #E7E7EB; border-radius: 20px; padding: 16px; }
+    .event-chip.high { background: #CC0000; color: #fff; box-shadow: 0 14px 30px -16px rgba(204,0,0,0.6); }
+    .chip-sport { font-size: 11px; font-weight: 700; letter-spacing: 0.09em; color: #9A9AA2; }
+    .event-chip.high .chip-sport { color: rgba(255,255,255,0.78); }
+    .chip-name { font-size: 15px; font-weight: 700; margin-top: 5px; letter-spacing: -0.01em; }
+    .chip-date { font-size: 12px; color: #6B6B72; font-weight: 500; margin-top: 2px; }
+    .event-chip.high .chip-date { color: rgba(255,255,255,0.8); }
+    .chip-pts { display: flex; align-items: flex-end; gap: 5px; margin-top: 14px; }
+    .chip-pts .num { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px; color: #CC0000; letter-spacing: -0.02em; }
+    .event-chip.high .chip-pts .num { color: #fff; }
+    .chip-pts .lbl { font-size: 11px; font-weight: 600; color: #9A9AA2; padding-bottom: 4px; }
+    .event-chip.high .chip-pts .lbl { color: rgba(255,255,255,0.8); }
+
+    /* SVC dark card */
+    .svc-card { margin-top: 18px; background: #111114; border-radius: 24px; padding: 22px; color: #fff; }
+    .svc-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; color: #CC0000; }
+    .svc-title { font-size: 21px; font-weight: 700; letter-spacing: -0.015em; margin-top: 8px; line-height: 1.2; }
+    .svc-sub { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 500; margin-top: 8px; }
+    .svc-btn {
+      margin-top: 16px; background: #CC0000; color: #fff; border: none;
+      border-radius: 13px; padding: 12px 20px;
+      font-family: 'Hanken Grotesk', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+    }
+
+    /* Status pills */
+    .status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 11.5px; font-weight: 700; }
+    .pill-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .pill-reserved { background: #F0F0F3; color: #141417; }
+    .pill-open { background: #FBE9E9; color: #CC0000; }
+    .pill-waitlist { background: #F0F0F3; color: #6B6B72; }
+    .pill-claimed { background: #E8F5E9; color: #2E7D32; }
+    .pill-selected { background: #FBE9E9; color: #CC0000; }
+
+    .event-step { font-size: 11.5px; font-weight: 600; color: #6B6B72; }
+    .event-name-lg { font-size: 18px; font-weight: 700; letter-spacing: -0.015em; margin-top: 14px; }
+    .event-meta { font-size: 13px; color: #6B6B72; font-weight: 500; margin-top: 4px; }
+    .progress-steps { display: flex; gap: 5px; margin-top: 16px; }
+    .step-seg { flex: 1; height: 6px; border-radius: 3px; }
+
+    .action-row { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid #EFEFF2; }
+    .withdraw-btn {
+      background: transparent; border: 1px solid #DDDDE2; color: #6B6B72;
+      border-radius: 11px; padding: 8px 14px;
+      font-family: 'Hanken Grotesk', sans-serif; font-size: 12.5px; font-weight: 700; cursor: pointer;
+    }
+    .withdraw-btn:hover { border-color: #CC0000; color: #CC0000; }
+    .reserve-btn {
+      width: 100%; margin-top: 16px; background: #CC0000; color: #fff; border: none;
+      border-radius: 13px; padding: 13px;
+      font-family: 'Hanken Grotesk', sans-serif; font-size: 14.5px; font-weight: 700; cursor: pointer;
+    }
+    .reserve-btn:hover { opacity: 0.9; }
+    .reserve-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .window-note { font-size: 12.5px; color: #6B6B72; font-weight: 600; margin-top: 10px; }
+    .waitlist-chip { display: inline-flex; align-items: center; gap: 7px; margin-top: 13px; padding: 8px 12px; border-radius: 12px; background: #F0F0F3; color: #141417; font-size: 12.5px; font-weight: 700; }
+    .alert-banner { display: flex; align-items: center; gap: 8px; padding: 11px 13px; border-radius: 13px; background: #FBE9E9; margin-top: 12px; }
+    .alert-text { font-size: 12.5px; font-weight: 700; color: #CC0000; }
+
+    /* Timeline */
+    .timeline-hd { margin: 24px 2px 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.1em; color: #9A9AA2; }
+    .timeline-card { background: #fff; border: 1px solid #E7E7EB; border-radius: 22px; padding: 20px 20px 6px; }
+    .tl-row { display: flex; gap: 14px; }
+    .tl-left { display: flex; flex-direction: column; align-items: center; flex: 0 0 auto; width: 12px; }
+    .tl-dot { width: 12px; height: 12px; border-radius: 50%; margin-top: 2px; }
+    .tl-line { flex: 1; width: 2px; min-height: 14px; }
+    .tl-content { padding-bottom: 18px; flex: 1; }
+    .tl-time { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; }
+    .tl-title { font-size: 13.5px; font-weight: 700; margin-top: 2px; }
+
+    /* Claims */
+    .pass-card {
+      border-radius: 26px; padding: 22px;
+      background: #CC0000; color: #fff;
+      position: relative; overflow: hidden;
+      box-shadow: 0 22px 44px -22px rgba(204,0,0,0.7);
+    }
+    .pass-ring-1 { position: absolute; right: -40px; top: -40px; width: 170px; height: 170px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.16); }
+    .pass-ring-2 { position: absolute; right: -10px; top: -10px; width: 110px; height: 110px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.13); }
+    .pass-top { display: flex; align-items: center; justify-content: space-between; position: relative; }
+    .pass-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; color: rgba(255,255,255,0.82); }
+    .pass-year { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: rgba(255,255,255,0.82); }
+    .pass-id-row { display: flex; align-items: center; gap: 13px; margin-top: 34px; position: relative; }
+    .pass-avatar { width: 46px; height: 46px; border-radius: 13px; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; }
+    .pass-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.01em; }
+    .pass-sub { font-size: 12.5px; color: rgba(255,255,255,0.78); font-weight: 500; margin-top: 2px; }
+    .pass-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 26px; position: relative; }
+    .pass-card-label { font-size: 13px; font-weight: 700; letter-spacing: 0.28em; }
+    .claim-card { background: #fff; border: 1.5px solid #CC0000; border-radius: 24px; padding: 20px; box-shadow: 0 1px 2px rgba(20,20,23,0.04), 0 16px 34px -22px rgba(204,0,0,0.28); }
+    .claim-selected { display: flex; align-items: center; gap: 8px; color: #CC0000; font-size: 12.5px; font-weight: 700; }
+    .claim-btn {
+      background: #CC0000; color: #fff; border: none; border-radius: 12px; padding: 11px 20px;
+      font-family: 'Hanken Grotesk', sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer;
+    }
+    .claim-btn:hover { opacity: 0.9; }
+    .claim-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .confirmed-check { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; background: #111114; color: #fff; }
+    .drop-btn { background: #141417; color: #fff; border: none; border-radius: 12px; padding: 11px 18px; font-family: 'Hanken Grotesk', sans-serif; font-size: 13.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+    .gate-info { margin-top: 16px; background: #EFEFF2; border-radius: 18px; padding: 16px 18px; display: flex; gap: 12px; }
+    .gate-text { font-size: 12.5px; line-height: 1.5; color: #6B6B72; font-weight: 500; }
+
+    /* Activity */
+    .stat-grid { display: flex; gap: 10px; margin-top: 12px; }
+    .stat-box { flex: 1; background: #fff; border: 1px solid #E7E7EB; border-radius: 18px; padding: 15px; text-align: center; }
+    .stat-num { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 26px; }
+    .stat-num.red { color: #CC0000; }
+    .stat-lbl { font-size: 11px; font-weight: 600; color: #9A9AA2; margin-top: 2px; }
+    .rebate-strip { display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 11px 14px; border-radius: 14px; background: #FBE9E9; }
+    .rebate-text { font-size: 12px; font-weight: 700; color: #CC0000; }
+    .activity-list { margin-top: 14px; background: #fff; border: 1px solid #E7E7EB; border-radius: 20px; overflow: hidden; }
+    .activity-row { display: flex; align-items: center; gap: 13px; padding: 15px 16px; border-top: 1px solid #EFEFF2; }
+    .activity-row:first-child { border-top: none; }
+    .act-icon { width: 38px; height: 38px; border-radius: 11px; background: #F0F0F3; display: flex; align-items: center; justify-content: center; color: #CC0000; flex: 0 0 auto; }
+    .act-body { flex: 1; min-width: 0; }
+    .act-title { font-size: 14px; font-weight: 700; }
+    .act-meta { font-size: 12px; color: #9A9AA2; font-weight: 500; margin-top: 2px; }
+    .act-pts { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; }
+
+    .empty { text-align: center; padding: 48px 20px; color: #9A9AA2; font-size: 14px; font-weight: 600; }
+  </style>
 </head>
 <body>
-<div class="app-shell">
-
-  <header class="student-header">
-    <span class="brand">Red Raider Loyalty</span>
-  </header>
-
-  <nav class="student-nav">
-    <a href="index.html" class="nav-item active" data-page="home">
-      <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
-      Home
-    </a>
-    <a href="Pages/reservations.html" class="nav-item" data-page="reservations">
-      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Reservations
-    </a>
-    <a href="Pages/rewards.html" class="nav-item" data-page="rewards">
-      <svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-      Rewards
-    </a>
-    <a href="Pages/activity.html" class="nav-item" data-page="activity">
-      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      Activity
-    </a>
-  </nav>
-
-  <main class="page-content">
-
-    <div class="greeting-row">
-      <div>
-        <span class="greeting-name">Hi, Madsen</span>
-        <span class="greeting-class">Senior</span>
+  <div id="appHeader">
+    <div class="header-row">
+      <div class="header-left">
+        <div class="rr-badge">RR</div>
+        <div class="header-title">Athletics Rewards</div>
       </div>
-      <span class="badge-fee-paid">✓ Fee paid</span>
-    </div>
-
-    <div class="points-card">
-      <div class="points-card-inner">
-        <div class="points-col">
-          <div class="points-label">Season Points</div>
-          <div class="points-value">2,840</div>
+      <div class="header-right">
+        <div class="pts-chip">
+          <span class="val" id="hdrPts">—</span>
+          <span class="lbl">pts</span>
         </div>
-        <div class="points-col">
-          <div class="points-label">Lifetime</div>
-          <div class="points-value">8,420</div>
-        </div>
-      </div>
-      <div class="points-card-footer">
-        2,840 pts to Student Victory Club membership
+        <button class="bell-btn">
+          <i data-lucide="bell" width="18" height="18" stroke-width="1.75"></i>
+          <span class="bell-dot"></span>
+        </button>
       </div>
     </div>
-
-    <div class="upcoming-label">Upcoming events</div>
-
-    <div class="event-list">
-
-      <div class="event-item">
-        <div class="event-item-badges">
-          <span class="badge badge-required">Reservation Required</span>
-          <span class="badge badge-high-impact">High-Impact</span>
-        </div>
-        <div class="event-item-name">Football vs. Kansas</div>
-        <div class="event-item-meta">Football · Sep 5, 2026 2:00 PM CT</div>
-        <div class="event-item-action">
-          <span class="event-item-status">Reservation window opens Mon 8 AM</span>
-          <button class="btn btn-outline btn-sm" disabled>Reserve</button>
-        </div>
-      </div>
-
-      <div class="event-item">
-        <div class="event-item-badges">
-          <span class="badge badge-claim">Claim Your Spot</span>
-        </div>
-        <div class="event-item-name">Football vs. ACU</div>
-        <div class="event-item-meta">Football · Sep 12, 2026 11:00 AM CT</div>
-        <div class="event-item-action">
-          <div class="confirm-line">
-            <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Selected — claim window open
-          </div>
-          <button class="btn btn-primary btn-sm" data-action="claim-spot" data-event-id="2" data-event-name="Football vs. ACU">
-            Claim your spot
-          </button>
-        </div>
-      </div>
-
-      <div class="event-item">
-        <div class="event-item-badges">
-          <span class="badge badge-claimed">Claimed</span>
-          <span class="badge badge-high-impact">High-Impact</span>
-        </div>
-        <div class="event-item-name">Men's Basketball vs. Iowa State</div>
-        <div class="event-item-meta">Men's Basketball · Jan 10, 2026 1:00 PM CT</div>
-        <div class="event-item-action">
-          <div class="confirm-line">
-            <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-            Confirmed — above the cutline
-          </div>
-          <button class="btn btn-outline btn-sm" data-action="drop-spot" data-event-id="3">
-            Drop my spot
-          </button>
-        </div>
-      </div>
-
-      <div class="event-item">
-        <div class="event-item-badges">
-          <span class="badge badge-waitlisted">Waitlisted</span>
-          <span class="badge badge-high-impact">High-Impact</span>
-        </div>
-        <div class="event-item-name">Football vs. Texas</div>
-        <div class="event-item-meta">Football · Oct 3, 2026 7:00 PM CT</div>
-        <div class="event-item-status">Keep notifications on — you'll be alerted if a spot opens.</div>
-      </div>
-
-      <div class="event-item">
-        <div class="event-item-badges">
-          <span class="badge badge-claimed">Confirmed</span>
-        </div>
-        <div class="event-item-name">Soccer vs. Texas</div>
-        <div class="event-item-meta">Soccer · Sep 18, 2026 7:00 PM CT</div>
-        <div class="confirm-line" style="margin-top: var(--sp-2);">
-          <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-          Reserved — show your physical student ID at the gate
-        </div>
-      </div>
-
-    </div>
-
-  </main>
-
-  <footer class="student-footer">
-    Texas Tech Athletics · Red Raider Loyalty
-  </footer>
-
-</div>
-
-<div class="modal-backdrop" id="drop-modal">
-  <div class="modal">
-    <div class="modal-header">
-      <h2>Drop your spot?</h2>
-      <button class="modal-close" id="drop-cancel">×</button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:14px; line-height:1.6; color:var(--text-secondary);">
-        Dropping your spot before the drop window closes means no penalty. A waitlisted Raider will be notified and can take your place.
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" id="drop-cancel">Cancel</button>
-      <button class="btn btn-primary" id="drop-confirm">Yes, drop my spot</button>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="home" onclick="switchTab('home')">
+        <div class="tab-label">Home</div><div class="tab-bar"></div>
+      </button>
+      <button class="tab-btn" data-tab="reserve" onclick="switchTab('reserve')">
+        <div class="tab-label">Reserve</div><div class="tab-bar"></div>
+      </button>
+      <button class="tab-btn" data-tab="claims" onclick="switchTab('claims')">
+        <div class="tab-label">Claims</div><div class="tab-bar"></div>
+      </button>
+      <button class="tab-btn" data-tab="activity" onclick="switchTab('activity')">
+        <div class="tab-label">Activity</div><div class="tab-bar"></div>
+      </button>
     </div>
   </div>
-</div>
 
-<script src="js/data.js"></script>
-<script src="js/student.js"></script>
+  <div id="appBody"><div class="spinner"></div></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/student-app.js"></script>
 </body>
 </html>

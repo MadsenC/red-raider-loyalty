@@ -262,7 +262,127 @@
     </div>
   </div>
 
-  <script src="../js/data.js"></script>
-  <script src="../js/admin.js"></script>
+  <script src="../js/api.js"></script>
+  <script>
+    let editingEventId = null;
+
+    (async () => {
+      const me = await requireLogin(true);
+      if (!me) return;
+      document.querySelector('.sidebar-user-name').textContent = me.name;
+      await loadEvents();
+    })();
+
+    async function loadEvents() {
+      const events = await API.admin.events();
+      const tbody = document.querySelector('tbody');
+      tbody.innerHTML = events.map(ev => {
+        const modeBadge = ev.mode === 'reservation_required'
+          ? `<span class="badge badge-required">Reservation Required</span>`
+          : `<span style="font-size:13px;color:var(--text-muted);">Open</span>`;
+        const statusBadge = ev.status === 'scheduled'
+          ? `<span class="badge badge-claimed">Scheduled</span>`
+          : ev.status === 'selection_complete'
+          ? `<span style="font-size:13px;color:var(--text-secondary);font-weight:500;">Selection Complete</span>`
+          : `<span class="badge badge-waitlisted">${ev.status}</span>`;
+        const dt = new Date(ev.game_datetime).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+        return `<tr>
+          <td>
+            <div style="font-weight:600;">${ev.name}</div>
+            <div style="font-size:12px;color:var(--text-muted);">${dt}</div>
+          </td>
+          <td>${ev.sport}</td>
+          <td>${modeBadge}</td>
+          <td>${ev.capacity?.toLocaleString()}</td>
+          <td>${statusBadge}</td>
+          <td><span class="table-link" onclick="editEvent(${ev.id})">Edit</span></td>
+        </tr>`;
+      }).join('');
+    }
+
+    function toLocal(iso) {
+      if (!iso) return '';
+      const d = new Date(iso);
+      return d.getFullYear() + '-' +
+        String(d.getMonth()+1).padStart(2,'0') + '-' +
+        String(d.getDate()).padStart(2,'0') + 'T' +
+        String(d.getHours()).padStart(2,'0') + ':' +
+        String(d.getMinutes()).padStart(2,'0');
+    }
+
+    document.getElementById('new-event-btn').addEventListener('click', () => {
+      editingEventId = null;
+      document.getElementById('event-modal-title').textContent = 'New Event';
+      document.getElementById('event-form').reset();
+      document.getElementById('reservation-fields').style.display = 'block';
+      document.getElementById('event-modal').classList.add('open');
+    });
+
+    document.getElementById('event-modal-close').addEventListener('click', () => {
+      document.getElementById('event-modal').classList.remove('open');
+    });
+
+    document.getElementById('entry-mode').addEventListener('change', function() {
+      document.getElementById('reservation-fields').style.display =
+        this.value === 'reservation_required' ? 'block' : 'none';
+    });
+
+    async function editEvent(id) {
+      const events = await API.admin.events();
+      const ev = events.find(e => e.id === id);
+      if (!ev) return;
+      editingEventId = id;
+      document.getElementById('event-modal-title').textContent = 'Edit Event';
+      document.getElementById('event-name').value = ev.name;
+      document.getElementById('event-sport').value = ev.sport;
+      document.getElementById('event-datetime').value = toLocal(ev.game_datetime);
+      document.getElementById('entry-mode').value = ev.mode;
+      document.getElementById('event-high-impact').value = ev.high_impact ? 'yes' : 'no';
+      document.getElementById('event-capacity').value = ev.capacity;
+      document.getElementById('event-office-allotment').value = ev.ticket_office_allotment || '';
+      document.getElementById('res-opens').value    = toLocal(ev.reservation_opens);
+      document.getElementById('res-closes').value   = toLocal(ev.reservation_closes);
+      document.getElementById('claim-opens').value  = toLocal(ev.claim_opens);
+      document.getElementById('claim-closes').value = toLocal(ev.claim_closes);
+      document.getElementById('waitlist-cascade').value = toLocal(ev.waitlist_cascade);
+      document.getElementById('open-claim').value   = toLocal(ev.open_claim_start);
+      document.getElementById('drop-closes').value  = toLocal(ev.drop_closes);
+      document.getElementById('event-points').value = ev.attendance_points;
+      document.getElementById('event-status').value = ev.status;
+      document.getElementById('reservation-fields').style.display =
+        ev.mode === 'reservation_required' ? 'block' : 'none';
+      document.getElementById('event-modal').classList.add('open');
+    }
+
+    document.getElementById('event-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const toISO = v => v ? new Date(v).toISOString() : null;
+      const body = {
+        name: document.getElementById('event-name').value,
+        sport: document.getElementById('event-sport').value,
+        game_datetime: toISO(document.getElementById('event-datetime').value),
+        mode: document.getElementById('entry-mode').value,
+        high_impact: document.getElementById('event-high-impact').value === 'yes',
+        capacity: Number(document.getElementById('event-capacity').value),
+        ticket_office_allotment: Number(document.getElementById('event-office-allotment').value) || 0,
+        attendance_points: Number(document.getElementById('event-points').value) || 100,
+        status: document.getElementById('event-status').value,
+        reservation_opens:  toISO(document.getElementById('res-opens').value),
+        reservation_closes: toISO(document.getElementById('res-closes').value),
+        claim_opens:   toISO(document.getElementById('claim-opens').value),
+        claim_closes:  toISO(document.getElementById('claim-closes').value),
+        waitlist_cascade: toISO(document.getElementById('waitlist-cascade').value),
+        open_claim_start: toISO(document.getElementById('open-claim').value),
+        drop_closes:   toISO(document.getElementById('drop-closes').value),
+      };
+      try {
+        if (editingEventId) await API.admin.updateEvent(editingEventId, body);
+        else                await API.admin.createEvent(body);
+        document.getElementById('event-modal').classList.remove('open');
+        toast('Event saved.');
+        await loadEvents();
+      } catch(err) { toast(err.data?.error || err.message, 'error'); }
+    });
+  </script>
 </body>
 </html>

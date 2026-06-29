@@ -114,24 +114,93 @@
     </div>
   </main>
 
-  <script src="../js/data.js"></script>
-  <script src="../js/admin.js"></script>
+  <script src="../js/api.js"></script>
   <script>
-    function switchTab(tab) {
-      const isPending = tab === 'pending';
-      document.getElementById('panel-pending').style.display  = isPending ? 'block' : 'none';
-      document.getElementById('panel-resolved').style.display = isPending ? 'none'  : 'block';
+    let currentTab = 'pending';
 
+    (async () => {
+      const me = await requireLogin(true);
+      if (!me) return;
+      document.querySelector('.sidebar-user-name').textContent = me.name;
+      await loadDisputes('pending');
+    })();
+
+    async function switchTab(tab) {
+      currentTab = tab;
+      const isPending = tab === 'pending';
       const pendingBtn  = document.getElementById('tab-pending');
       const resolvedBtn = document.getElementById('tab-resolved');
 
       pendingBtn.style.borderBottomColor  = isPending ? 'var(--ttu-red)' : 'transparent';
       pendingBtn.style.color              = isPending ? 'var(--ttu-red)' : 'var(--text-muted)';
       pendingBtn.style.fontWeight         = isPending ? '600' : '500';
-
       resolvedBtn.style.borderBottomColor = isPending ? 'transparent' : 'var(--ttu-red)';
       resolvedBtn.style.color             = isPending ? 'var(--text-muted)' : 'var(--ttu-red)';
       resolvedBtn.style.fontWeight        = isPending ? '500' : '600';
+
+      await loadDisputes(tab === 'resolved' ? 'upheld' : 'pending');
+    }
+
+    async function loadDisputes(status) {
+      const pending  = document.getElementById('panel-pending');
+      const resolved = document.getElementById('panel-resolved');
+      const isPending = status === 'pending';
+      pending.style.display  = isPending ? 'block' : 'none';
+      resolved.style.display = isPending ? 'none'  : 'block';
+
+      const disputes = await API.admin.disputes(status);
+      const panel = isPending ? pending : resolved;
+      panel.innerHTML = '';
+
+      if (!disputes.length) {
+        panel.innerHTML = `<p style="font-size:13px;color:var(--text-muted);padding:12px 0;">No ${status} disputes.</p>`;
+
+        /* Update tab count */
+        if (isPending) document.getElementById('tab-pending').textContent = 'Pending (0)';
+        return;
+      }
+
+      if (isPending) document.getElementById('tab-pending').textContent = `Pending (${disputes.length})`;
+
+      disputes.forEach(d => {
+        const dt = new Date(d.game_datetime).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+        panel.innerHTML += isPending ? `
+          <div class="dispute-card" style="margin-bottom:16px;">
+            <div class="dispute-header">
+              <div>
+                <div class="dispute-student">${d.studentName}</div>
+                <div class="dispute-event">${d.r_number} · ${d.erider} · ${d.eventName} · ${dt}</div>
+              </div>
+              <div>
+                <span class="badge badge-required">Pending</span>
+                <div style="font-size:12px;color:var(--ttu-red);font-weight:600;margin-top:4px;text-align:right;">−${d.penalty_points} pts</div>
+              </div>
+            </div>
+            <div class="dispute-actions">
+              <button class="btn btn-primary btn-sm" onclick="doDispute(${d.id},'clear')">Clear flag — no penalty</button>
+              <button class="btn btn-outline btn-sm" onclick="doDispute(${d.id},'uphold')">Uphold — apply −${d.penalty_points} pts</button>
+            </div>
+          </div>` : `
+          <div class="card card-body" style="margin-bottom:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+              <div>
+                <div style="font-weight:600;">${d.studentName}</div>
+                <div style="font-size:12px;color:var(--text-muted);">${d.r_number} · ${d.eventName} · ${dt}</div>
+              </div>
+              <span class="badge ${d.dispute_status === 'cleared' ? 'badge-claimed' : 'badge-required'}">${d.dispute_status === 'cleared' ? 'Cleared' : 'Upheld'}</span>
+            </div>
+            <p style="font-size:13px;color:var(--text-muted);">${d.dispute_status === 'cleared' ? 'Flag cleared — no penalty applied.' : `Penalty applied: −${d.penalty_points} pts.`}</p>
+          </div>`;
+      });
+    }
+
+    async function doDispute(id, action) {
+      try {
+        if (action === 'clear')  await API.admin.clearDispute(id);
+        if (action === 'uphold') await API.admin.upholdDispute(id);
+        toast(action === 'clear' ? 'Flag cleared — no penalty.' : 'Penalty applied.');
+        await loadDisputes('pending');
+      } catch(e) { toast(e.data?.error || e.message, 'error'); }
     }
   </script>
 </body>

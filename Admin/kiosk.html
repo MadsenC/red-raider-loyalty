@@ -154,63 +154,78 @@
     </div>
   </div>
 
-  <script src="../js/data.js"></script>
-  <script src="../js/admin.js"></script>
+  <script src="../js/api.js"></script>
   <script>
-    /* Mock student lookup — replace with POST /api/admin/checkin */
-    const MOCK_LOOKUP = {
-      'R11873238': { name: 'Andrew Lils',   status: 'confirmed', pts: 100 },
-      'R17171748': { name: 'Bryce Hewatt',  status: 'confirmed', pts: 100 },
-      'R00401438': { name: 'J.P. Williams', status: 'confirmed', pts: 100 },
-      'R11925460': { name: 'Madsen Cooper', status: 'confirmed', pts: 100 },
-      'R11984332': { name: 'Will Shoaf',    status: 'waitlist',  pts: 0   },
-    };
-
+    let currentEventId = null;
     let clearTimer = null;
 
-    document.getElementById('kiosk-form').addEventListener('submit', e => {
+    (async () => {
+      const me = await requireLogin(true);
+      if (!me) return;
+      const events = await API.admin.events();
+      /* Pre-select the most relevant event (soonest future or last past) */
+      const now = new Date();
+      const future = events.filter(e => new Date(e.game_datetime) >= now);
+      const ev = future[0] || events[events.length - 1];
+      if (ev) {
+        currentEventId = ev.id;
+        const dt = new Date(ev.game_datetime).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+        document.querySelector('.kiosk-event-name').textContent = `${ev.name} · ${dt}`;
+      }
+      document.getElementById('scan-log').innerHTML = '';
+    })();
+
+    document.getElementById('kiosk-form').addEventListener('submit', async e => {
       e.preventDefault();
-      const raw = document.getElementById('kiosk-input').value.trim().toUpperCase();
-      if (!raw) return;
-
-      const student = MOCK_LOOKUP[raw];
-      const result  = document.getElementById('kiosk-result');
-
+      const raw    = document.getElementById('kiosk-input').value.trim().toUpperCase();
+      const result = document.getElementById('kiosk-result');
+      if (!raw || !currentEventId) return;
       clearTimeout(clearTimer);
 
-      if (student && student.status === 'confirmed') {
-        result.innerHTML = `
-          <div class="result-success">
-            <div class="result-icon">✓</div>
-            <div class="result-headline" style="color:var(--claimed-text);">Entry Confirmed</div>
-            <div class="result-sub">${student.name} · ${raw}</div>
-            <div style="margin-top:8px; font-size:13px; font-weight:600; color:var(--claimed-text);">+${student.pts} pts posted</div>
-          </div>
-          <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%;"></div></div>`;
-        addScanLog(raw, student.name, true);
-      } else if (student && student.status === 'waitlist') {
-        result.innerHTML = `
-          <div class="result-deny">
-            <div class="result-icon">→</div>
-            <div class="result-headline" style="color:var(--ttu-red);">Waitlist Area</div>
-            <div class="result-sub">${student.name} · ${raw}<br>No confirmed claim — direct to student waitlist area.</div>
-          </div>
-          <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%; background:var(--ttu-red);"></div></div>`;
-        addScanLog(raw, student.name, false);
-      } else {
+      try {
+        const r = await API.admin.checkin({ rNumber: raw, eventId: currentEventId });
+
+        if (r.success && r.alreadyScanned) {
+          result.innerHTML = `
+            <div class="result-deny">
+              <div class="result-icon">⚠</div>
+              <div class="result-headline" style="color:var(--ttu-red);">Already Scanned</div>
+              <div class="result-sub">${r.student} · ${raw}<br>This ID was already scanned for this event.</div>
+            </div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%;background:var(--ttu-red);"></div></div>`;
+          addScanLog(raw, r.student, false, 'Already scanned');
+        } else if (r.success) {
+          result.innerHTML = `
+            <div class="result-success">
+              <div class="result-icon">✓</div>
+              <div class="result-headline" style="color:var(--claimed-text);">Entry Confirmed</div>
+              <div class="result-sub">${r.student} · ${raw}</div>
+              <div style="margin-top:8px;font-size:13px;font-weight:600;color:var(--claimed-text);">+${r.pointsAwarded} pts posted · ${r.newTotal?.toLocaleString()} total</div>
+            </div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%;"></div></div>`;
+          addScanLog(raw, r.student, true);
+        } else {
+          result.innerHTML = `
+            <div class="result-deny">
+              <div class="result-icon">→</div>
+              <div class="result-headline" style="color:var(--ttu-red);">${r.student ? 'Waitlist Area' : 'Not Found'}</div>
+              <div class="result-sub">${raw}${r.student ? ' · ' + r.student : ''}<br>${r.reason || 'No confirmed claim.'}</div>
+            </div>
+            <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%;background:var(--ttu-red);"></div></div>`;
+          addScanLog(raw, r.student || '—', false, r.reason || 'No claim');
+        }
+      } catch (err) {
         result.innerHTML = `
           <div class="result-deny">
             <div class="result-icon">✗</div>
-            <div class="result-headline" style="color:var(--ttu-red);">Not Found</div>
-            <div class="result-sub">${raw}<br>No record found. Verify the ID and try again, or direct to gate staff.</div>
-          </div>
-          <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%; background:var(--ttu-red);"></div></div>`;
+            <div class="result-headline" style="color:var(--ttu-red);">Error</div>
+            <div class="result-sub">${err.message}</div>
+          </div>`;
       }
 
       document.getElementById('kiosk-input').value = '';
       document.getElementById('kiosk-input').focus();
 
-      /* Auto-clear result after 4 seconds */
       const fill = document.getElementById('timer-fill');
       if (fill) {
         requestAnimationFrame(() => {
@@ -218,22 +233,19 @@
           fill.style.width = '0%';
         });
       }
-      clearTimer = setTimeout(() => {
-        result.innerHTML = '';
-      }, 4000);
+      clearTimer = setTimeout(() => { result.innerHTML = ''; }, 4000);
     });
 
-    function addScanLog(rNumber, name, success) {
+    function addScanLog(rNumber, name, success, note) {
       const log  = document.getElementById('scan-log');
       const item = document.createElement('div');
-      item.style.cssText = 'display:flex; justify-content:space-between; align-items:center; background:white; border-radius:6px; padding:12px 16px; border:1px solid var(--border-light); font-size:13px;';
+      item.style.cssText = 'display:flex;justify-content:space-between;align-items:center;background:white;border-radius:6px;padding:12px 16px;border:1px solid var(--border-light);font-size:13px;';
       item.innerHTML = `
-        <span style="font-weight:600;">${rNumber} — ${name}</span>
-        <span style="color:${success ? 'var(--claimed-text)' : 'var(--ttu-red)'}; font-weight:700;">
-          ${success ? '✓ Entry confirmed' : '→ Waitlist area'}
+        <span style="font-weight:600;">${rNumber}${name && name !== '—' ? ' — ' + name : ''}</span>
+        <span style="color:${success ? 'var(--claimed-text)' : 'var(--ttu-red)'};font-weight:700;">
+          ${success ? '✓ Entry confirmed' : note ? '→ ' + note : '→ Denied'}
         </span>`;
       log.insertBefore(item, log.firstChild);
-      /* Keep log to last 10 scans */
       while (log.children.length > 10) log.removeChild(log.lastChild);
     }
   </script>

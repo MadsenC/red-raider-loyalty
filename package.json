@@ -1,0 +1,21 @@
+{
+  "name": "red-raider-loyalty",
+  "version": "1.0.0",
+  "description": "Texas Tech Athletics — Student spot-reservation and loyalty points platform",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node database/seed.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^12.11.1",
+    "connect-sqlite3": "^0.9.14",
+    "express": "^4.18.2",
+    "express-session": "^1.18.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

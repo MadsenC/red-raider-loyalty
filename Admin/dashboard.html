@@ -205,13 +205,144 @@
     </div>
   </main>
 
-  <script src="../js/data.js"></script>
-  <script src="../js/admin.js"></script>
+  <script src="../js/api.js"></script>
   <script>
-    function switchEvent(id) {
-      /* TODO: reload dashboard data for selected event ID */
-      console.log('Switch to event', id);
+    let allEvents = [], currentEventId = null;
+
+    (async () => {
+      const me = await requireLogin(true);
+      if (!me) return;
+      document.querySelector('.sidebar-user-name').textContent = me.name;
+      allEvents = await API.admin.events();
+      populateSelector();
+      if (allEvents.length) await loadDashboard(allEvents[0].id);
+      await loadDisputes();
+    })();
+
+    function populateSelector() {
+      const sel = document.getElementById('event-selector');
+      sel.innerHTML = allEvents.map(e =>
+        `<option value="${e.id}">${e.name}</option>`
+      ).join('');
+      const nameEl = document.querySelector('.event-selector-name');
+      const subEl  = document.querySelector('.event-selector-sub');
+      if (allEvents[0]) {
+        nameEl.textContent = allEvents[0].name;
+        subEl.textContent  = `${allEvents[0].mode === 'reservation_required' ? 'Reservation Required' : 'Open'} · Capacity ${allEvents[0].capacity?.toLocaleString()}`;
+      }
     }
+
+    async function switchEvent(id) {
+      currentEventId = id;
+      const ev = allEvents.find(e => e.id == id);
+      if (ev) {
+        document.querySelector('.event-selector-name').textContent = ev.name;
+        document.querySelector('.event-selector-sub').textContent  = `${ev.mode === 'reservation_required' ? 'Reservation Required' : 'Open'} · Capacity ${ev.capacity?.toLocaleString()}`;
+      }
+      await loadDashboard(id);
+    }
+
+    async function loadDashboard(id) {
+      currentEventId = id;
+      try {
+        const d = await API.admin.dashboard(id);
+        const stats = document.querySelectorAll('.dashboard-stat-value');
+        if (stats[0]) stats[0].textContent = d.reservationCount.toLocaleString();
+        if (stats[1]) stats[1].textContent = d.claimCount.toLocaleString();
+        if (stats[2]) stats[2].textContent = d.capacityUsed + '%';
+        if (stats[3]) stats[3].textContent = d.pendingFlags;
+
+        const subs = document.querySelectorAll('.dashboard-stat-sub');
+        if (subs[1]) subs[1].textContent = d.showRate + '% show rate';
+        if (subs[2]) {
+          const remaining = d.event.capacity - d.confirmedCount;
+          subs[2].textContent = remaining.toLocaleString() + ' spots remain';
+        }
+
+        /* Update timeline with real window dates */
+        const ev = d.event;
+        const rows = document.querySelectorAll('.timeline-row');
+        const windows = [
+          { label: 'Reservation Window Opens', val: ev.reservation_opens },
+          { label: 'Reservation Window Closes', val: ev.reservation_closes },
+          { label: 'Claim Window Opens',  val: ev.claim_opens },
+          { label: 'Claim Window Closes', val: ev.claim_closes },
+          { label: 'Waitlist Cascade',    val: ev.waitlist_cascade },
+          { label: 'Open Claim',          val: ev.open_claim_start },
+          { label: 'Drop Window Closes',  val: ev.drop_closes },
+        ];
+        const now = new Date().toISOString();
+        rows.forEach((row, i) => {
+          if (!windows[i]) return;
+          const timeEl = row.querySelector('.timeline-window-time');
+          const badge  = row.querySelector('.timeline-badge');
+          if (timeEl && windows[i].val) timeEl.textContent = new Date(windows[i].val).toLocaleString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'}) + ' CT';
+          if (badge && windows[i].val) {
+            const past   = now > windows[i].val;
+            const active = i > 0 && windows[i-1]?.val && now > windows[i-1].val && now <= windows[i].val;
+            badge.className = 'timeline-badge ' + (past ? 'timeline-badge-closed' : active ? 'timeline-badge-open' : 'timeline-badge-upcoming');
+            badge.textContent = past ? 'Closed' : active ? 'Open' : 'Upcoming';
+          }
+        });
+      } catch(e) { console.error(e); }
+    }
+
+    async function loadDisputes() {
+      try {
+        const disputes = await API.admin.disputes('pending');
+        const panel = document.querySelector('.panel:last-of-type .dispute-card')?.parentElement;
+        if (!panel) return;
+        if (!disputes.length) {
+          panel.querySelector('.dispute-card')?.remove();
+          panel.innerHTML += '<p style="font-size:13px;color:var(--text-muted);padding:12px 0;">No pending disputes.</p>';
+          return;
+        }
+        const card = panel.querySelector('.dispute-card');
+        if (card && disputes[0]) {
+          card.querySelector('.dispute-student').textContent = disputes[0].studentName + ' — ' + disputes[0].r_number;
+          card.querySelector('.dispute-event').textContent   = disputes[0].eventName + ' · ' + new Date(disputes[0].game_datetime).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+          const clearBtn  = card.querySelector('[data-action="clear-dispute"]');
+          const upholdBtn = card.querySelector('[data-action="uphold-dispute"]');
+          if (clearBtn)  clearBtn.onclick  = () => doDispute(disputes[0].id, 'clear');
+          if (upholdBtn) upholdBtn.onclick = () => doDispute(disputes[0].id, 'uphold');
+        }
+      } catch(e) { console.error(e); }
+    }
+
+    async function doDispute(id, action) {
+      try {
+        if (action === 'clear')  await API.admin.clearDispute(id);
+        if (action === 'uphold') await API.admin.upholdDispute(id);
+        toast(action === 'clear' ? 'Flag cleared — no penalty.' : 'Penalty applied.');
+        await loadDisputes();
+      } catch(e) { toast(e.message, 'error'); }
+    }
+
+    document.getElementById('run-selection-btn').addEventListener('click', async () => {
+      if (!currentEventId) return;
+      if (!confirm('Run selection draw for this event?')) return;
+      try {
+        const r = await API.admin.runSelection(currentEventId);
+        toast(r.message);
+        await loadDashboard(currentEventId);
+      } catch(e) { toast(e.data?.error || e.message, 'error'); }
+    });
+
+    document.getElementById('run-noshow-btn').addEventListener('click', async () => {
+      if (!currentEventId) return;
+      try {
+        const r = await API.admin.noshowSweep(currentEventId);
+        toast(r.message);
+        await loadDashboard(currentEventId);
+        await loadDisputes();
+      } catch(e) { toast(e.data?.error || e.message, 'error'); }
+    });
+
+    document.getElementById('recompute-btn').addEventListener('click', async () => {
+      if (!currentEventId) return;
+      await loadDashboard(currentEventId);
+      toast('Stats refreshed.');
+    });
   </script>
 </body>
 </html>
