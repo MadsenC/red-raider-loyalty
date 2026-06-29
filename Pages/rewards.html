@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Rewards — Red Raider Loyalty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/student-layout.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="student-header">
+    <span class="brand">Red Raider Loyalty</span>
+  </header>
+
+  <nav class="student-nav">
+    <a href="home.html" class="nav-item" data-page="home">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+      Home
+    </a>
+    <a href="reservations.html" class="nav-item" data-page="reservations">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reservations
+    </a>
+    <a href="rewards.html" class="nav-item active" data-page="rewards">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+      Rewards
+    </a>
+    <a href="activity.html" class="nav-item" data-page="activity">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Activity
+    </a>
+  </nav>
+
+  <main class="page-content">
+
+    <!-- Header row with points balance -->
+    <div class="rewards-balance-row">
+      <h1 style="font-size:22px; font-weight:700;">Rewards</h1>
+      <span class="points-chip">2,840 pts to spend</span>
+    </div>
+    <p style="font-size:13px; color:var(--text-muted); margin-bottom:var(--sp-5);">Spend your points</p>
+
+    <!-- Student Victory Club Banner -->
+    <div class="svc-banner">
+      <div class="svc-banner-title">Student Victory Club: 2,840 points away</div>
+      <div class="svc-banner-sub">Renewal rebate + exclusive student experiences for members with low no-shows</div>
+    </div>
+
+    <!-- Catalog -->
+    <div class="catalog-label">Catalog</div>
+
+    <div class="catalog-item">
+      <div class="catalog-item-info">
+        <div class="catalog-item-name">Early Entry Pass</div>
+        <div class="catalog-item-type">Priority Access</div>
+      </div>
+      <div>
+        <div class="catalog-item-points">300 pts</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:6px;" onclick="redeemItem(this, 'Early Entry Pass', 300)">Redeem</button>
+      </div>
+    </div>
+
+    <div class="catalog-item">
+      <div class="catalog-item-info">
+        <div class="catalog-item-name">Raider Red Tee</div>
+        <div class="catalog-item-type">Merchandise</div>
+      </div>
+      <div>
+        <div class="catalog-item-points">500 pts</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:6px;" onclick="redeemItem(this, 'Raider Red Tee', 500)">Redeem</button>
+      </div>
+    </div>
+
+    <div class="catalog-item">
+      <div class="catalog-item-info">
+        <div class="catalog-item-name">Raider Walk Access</div>
+        <div class="catalog-item-type">Priority Access</div>
+      </div>
+      <div>
+        <div class="catalog-item-points">750 pts</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:6px;" onclick="redeemItem(this, 'Raider Walk Access', 750)">Redeem</button>
+      </div>
+    </div>
+
+    <div class="catalog-item">
+      <div class="catalog-item-info">
+        <div class="catalog-item-name">Sideline Pass</div>
+        <div class="catalog-item-type">Exclusive Experience</div>
+      </div>
+      <div>
+        <div class="catalog-item-points">2,000 pts</div>
+        <button class="btn btn-primary btn-sm" style="margin-top:6px;" onclick="redeemItem(this, 'Sideline Pass', 2000)">Redeem</button>
+      </div>
+    </div>
+
+    <div class="catalog-item">
+      <div class="catalog-item-info">
+        <div class="catalog-item-name">Meet the Team</div>
+        <div class="catalog-item-type">Exclusive Experience</div>
+      </div>
+      <div>
+        <div class="catalog-item-points">3,500 pts</div>
+        <button class="btn btn-outline btn-sm" style="margin-top:6px;" disabled title="Not enough points">Redeem</button>
+      </div>
+    </div>
+
+    <div class="catalog-item" style="opacity: 0.6;">
+      <div class="catalog-item-info">
+        <div class="catalog-item-name">Locker Room Tour</div>
+        <div class="catalog-item-type">Exclusive Experience</div>
+      </div>
+      <div>
+        <div class="catalog-item-points">5,000 pts</div>
+        <span style="font-size:12px; color:var(--text-muted); margin-top:6px; display:block;">Unavailable</span>
+      </div>
+    </div>
+
+    <!-- SVC Info -->
+    <div class="divider"></div>
+    <div class="card card-body" style="margin-bottom: var(--sp-5);">
+      <div style="font-size:15px; font-weight:700; margin-bottom:var(--sp-2);">Student Victory Club</div>
+      <p style="font-size:13px; color:var(--text-secondary); line-height:1.6; margin-bottom:var(--sp-3);">
+        A paid membership for dedicated Red Raiders. Guaranteed spot at every home event, exclusive experiences, and a renewal rebate when your no-shows stay low.
+      </p>
+      <p style="font-size:12px; color:var(--text-muted);">Membership offered through the Red Raider Club — details announced separately.</p>
+    </div>
+
+  </main>
+
+  <footer class="student-footer">
+    Texas Tech Athletics · Red Raider Loyalty
+  </footer>
+
+</div>
+
+<!-- Redeem Confirmation Modal -->
+<div class="modal-backdrop" id="redeem-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Confirm Redemption</h2>
+      <button class="modal-close" onclick="document.getElementById('redeem-modal').classList.remove('open')">×</button>
+    </div>
+    <div class="modal-body">
+      <p id="redeem-msg" style="font-size:14px; line-height:1.6; color:var(--text-secondary);"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="document.getElementById('redeem-modal').classList.remove('open')">Cancel</button>
+      <button class="btn btn-primary" id="redeem-confirm">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/student.js"></script>
+<script>
+  let pendingRedeemBtn = null;
+  let pendingCost = 0;
+
+  function redeemItem(btn, name, cost) {
+    pendingRedeemBtn = btn;
+    pendingCost = cost;
+    document.getElementById('redeem-msg').textContent =
+      `Redeem "${name}" for ${cost.toLocaleString()} points? This cannot be undone.`;
+    document.getElementById('redeem-modal').classList.add('open');
+  }
+
+  document.getElementById('redeem-confirm').addEventListener('click', () => {
+    if (pendingRedeemBtn) {
+      pendingRedeemBtn.textContent = 'Redeemed ✓';
+      pendingRedeemBtn.disabled = true;
+      pendingRedeemBtn.classList.replace('btn-primary', 'btn-ghost');
+    }
+    document.getElementById('redeem-modal').classList.remove('open');
+    /* TODO: POST /api/redeem with itemId */
+  });
+</script>
+</body>
+</html>

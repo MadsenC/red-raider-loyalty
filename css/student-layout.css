@@ -1,0 +1,477 @@
+/* ─── Student Mobile WebView Layout ─────────────────────────────────────── */
+
+/* Constrain to mobile width for webview */
+html, body {
+  background: var(--bg-cream);
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+/* ── App Shell ── */
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.student-header {
+  background: var(--ttu-red);
+  padding: 14px var(--sp-4);
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.student-header .brand {
+  font-family: var(--font-brand);
+  font-size: 28px;
+  color: var(--text-white);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ── Top Navigation Tabs ── */
+.student-nav {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--bg-white);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 57px;
+  z-index: 40;
+}
+
+.student-nav .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: var(--sp-2) var(--sp-1);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 2.5px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  text-decoration: none;
+}
+
+.student-nav .nav-item svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.student-nav .nav-item.active {
+  color: var(--ttu-red);
+  border-bottom-color: var(--ttu-red);
+  font-weight: 600;
+}
+
+.student-nav .nav-item:hover:not(.active) {
+  color: var(--text-secondary);
+}
+
+/* ── Main Page Content ── */
+.page-content {
+  flex: 1;
+  padding: var(--sp-5) var(--sp-4);
+  background: var(--bg-cream);
+}
+
+/* ── Student Footer ── */
+.student-footer {
+  padding: var(--sp-5) var(--sp-4);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-white);
+}
+
+/* ── Home Page: Greeting ── */
+.greeting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-5);
+}
+
+.greeting-name {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.greeting-class {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-left: var(--sp-2);
+}
+
+/* ── Points Card ── */
+.points-card {
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  margin-bottom: var(--sp-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.points-card-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.points-col {
+  padding: var(--sp-4) var(--sp-5);
+}
+
+.points-col + .points-col {
+  border-left: 1px solid var(--border-light);
+}
+
+.points-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--sp-2);
+}
+
+.points-value {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.points-card-footer {
+  border-top: 3px solid var(--ttu-red);
+  padding: var(--sp-3) var(--sp-5);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ── Upcoming Events Section ── */
+.upcoming-label {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-3);
+}
+
+/* ── Event List Items ── */
+.event-list { display: flex; flex-direction: column; gap: var(--sp-3); }
+
+.event-item {
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  padding: var(--sp-4) var(--sp-4);
+  box-shadow: var(--shadow-sm);
+}
+
+.event-item-badges {
+  display: flex;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.event-item-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.event-item-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-3);
+}
+
+.event-item-status {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.event-item-action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--sp-3);
+  gap: var(--sp-3);
+}
+
+/* ── Reservations Page ── */
+.reservations-header {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-4);
+}
+
+/* ── Rewards Page ── */
+.rewards-balance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-5);
+}
+
+.rewards-balance-row h2 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.points-chip {
+  background: var(--text-primary);
+  color: var(--text-white);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 99px;
+}
+
+.svc-banner {
+  background: var(--impact-bg);
+  border: 1px solid #FDE68A;
+  border-radius: var(--radius-md);
+  padding: var(--sp-4) var(--sp-5);
+  margin-bottom: var(--sp-5);
+}
+
+.svc-banner-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--impact-text);
+}
+
+.svc-banner-sub {
+  font-size: 12px;
+  color: var(--impact-text);
+  opacity: 0.85;
+  margin-top: var(--sp-1);
+}
+
+.catalog-label {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: var(--sp-3);
+}
+
+.catalog-item {
+  background: var(--bg-white);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+  padding: var(--sp-4) var(--sp-5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-3);
+  box-shadow: var(--shadow-sm);
+}
+
+.catalog-item-info { flex: 1; }
+.catalog-item-name { font-size: 15px; font-weight: 600; }
+.catalog-item-type { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+.catalog-item-points {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ── Activity Page ── */
+.activity-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+.activity-stat-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4) var(--sp-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.activity-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-2);
+}
+
+.activity-stat-value {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.history-label {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: var(--sp-3);
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--sp-2);
+  box-shadow: var(--shadow-sm);
+}
+
+.history-item-name { font-size: 14px; font-weight: 600; }
+.history-item-date { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+.history-item-pts {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--claimed-text);
+}
+.history-item-pts.negative { color: var(--ttu-red); }
+
+/* ── Athletic Fee Page ── */
+.fee-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--sp-10) var(--sp-4);
+}
+
+.fee-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--impact-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-5);
+}
+
+.fee-icon svg {
+  width: 32px;
+  height: 32px;
+  stroke: var(--impact-text);
+  fill: none;
+  stroke-width: 1.8;
+}
+
+.fee-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: var(--sp-3);
+}
+
+.fee-body {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--sp-6);
+  max-width: 320px;
+}
+
+/* ── Error / Utility Pages ── */
+.util-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--sp-10) var(--sp-4);
+  gap: var(--sp-4);
+}
+
+.util-icon {
+  font-size: 48px;
+  line-height: 1;
+}
+
+.util-title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.util-body {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 300px;
+}
+
+/* ── Check-In Result ── */
+.checkin-result {
+  padding: var(--sp-6) var(--sp-4);
+}
+
+.checkin-success {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--claimed-text);
+  padding: var(--sp-6);
+  text-align: center;
+  margin-bottom: var(--sp-5);
+}
+
+.checkin-fail {
+  background: var(--bg-white);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--ttu-red);
+  padding: var(--sp-6);
+  text-align: center;
+  margin-bottom: var(--sp-5);
+}
+
+.checkin-icon {
+  font-size: 52px;
+  margin-bottom: var(--sp-3);
+}
+
+.checkin-headline {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: var(--sp-2);
+}
+
+.checkin-sub {
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.checkin-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 14px;
+}
+
+.checkin-detail-row:last-child { border-bottom: none; }
+.checkin-detail-label { color: var(--text-muted); }
+.checkin-detail-value { font-weight: 600; }

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rewards Catalog — Red Raider Loyalty Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin-layout.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <span class="brand">Red Raider Loyalty</span>
+      <span class="subtitle">Admin Console</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+      <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</a>
+      <a href="activities.html" class="sidebar-link"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Activities &amp; Points</a>
+      <a href="rewards.html" class="sidebar-link active"><svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>Rewards Catalog</a>
+      <a href="checkinwindows.html" class="sidebar-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Check-in Windows</a>
+      <a href="students.html" class="sidebar-link"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Students</a>
+      <a href="noshow.html" class="sidebar-link"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>No-Show Review</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Madsen Cooper</div>
+      <div class="sidebar-user-role">Promotion &amp; Fan Engagement</div>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <div class="admin-content-inner">
+
+      <div class="admin-page-header">
+        <h1 class="admin-page-title">Rewards Catalog</h1>
+        <button class="btn btn-primary" id="new-reward-btn">+ Add reward</button>
+      </div>
+
+      <!-- Catalog Items -->
+      <div id="rewards-list">
+
+        <div class="rewards-catalog-item">
+          <div>
+            <div style="font-weight:600;">Early Entry Pass</div>
+            <div style="font-size:12px; color:var(--text-muted);">Priority Access</div>
+          </div>
+          <div style="font-size:14px; font-weight:700;">300 pts</div>
+          <span class="badge badge-claimed">Active</span>
+          <div style="display:flex; gap:var(--sp-2);">
+            <button class="btn btn-ghost btn-sm" onclick="editReward(this)">Edit</button>
+            <button class="btn btn-outline btn-sm" onclick="toggleReward(this, 'Early Entry Pass')">Deactivate</button>
+          </div>
+        </div>
+
+        <div class="rewards-catalog-item">
+          <div>
+            <div style="font-weight:600;">Raider Red Tee</div>
+            <div style="font-size:12px; color:var(--text-muted);">Merchandise</div>
+          </div>
+          <div style="font-size:14px; font-weight:700;">500 pts</div>
+          <span class="badge badge-claimed">Active</span>
+          <div style="display:flex; gap:var(--sp-2);">
+            <button class="btn btn-ghost btn-sm" onclick="editReward(this)">Edit</button>
+            <button class="btn btn-outline btn-sm" onclick="toggleReward(this, 'Raider Red Tee')">Deactivate</button>
+          </div>
+        </div>
+
+        <div class="rewards-catalog-item">
+          <div>
+            <div style="font-weight:600;">Raider Walk Access</div>
+            <div style="font-size:12px; color:var(--text-muted);">Priority Access</div>
+          </div>
+          <div style="font-size:14px; font-weight:700;">750 pts</div>
+          <span class="badge badge-claimed">Active</span>
+          <div style="display:flex; gap:var(--sp-2);">
+            <button class="btn btn-ghost btn-sm" onclick="editReward(this)">Edit</button>
+            <button class="btn btn-outline btn-sm" onclick="toggleReward(this, 'Raider Walk Access')">Deactivate</button>
+          </div>
+        </div>
+
+        <div class="rewards-catalog-item">
+          <div>
+            <div style="font-weight:600;">Sideline Pass</div>
+            <div style="font-size:12px; color:var(--text-muted);">Exclusive Experience</div>
+          </div>
+          <div style="font-size:14px; font-weight:700;">2,000 pts</div>
+          <span class="badge badge-claimed">Active</span>
+          <div style="display:flex; gap:var(--sp-2);">
+            <button class="btn btn-ghost btn-sm" onclick="editReward(this)">Edit</button>
+            <button class="btn btn-outline btn-sm" onclick="toggleReward(this, 'Sideline Pass')">Deactivate</button>
+          </div>
+        </div>
+
+        <div class="rewards-catalog-item">
+          <div>
+            <div style="font-weight:600;">Meet the Team</div>
+            <div style="font-size:12px; color:var(--text-muted);">Exclusive Experience</div>
+          </div>
+          <div style="font-size:14px; font-weight:700;">3,500 pts</div>
+          <span class="badge badge-claimed">Active</span>
+          <div style="display:flex; gap:var(--sp-2);">
+            <button class="btn btn-ghost btn-sm" onclick="editReward(this)">Edit</button>
+            <button class="btn btn-outline btn-sm" onclick="toggleReward(this, 'Meet the Team')">Deactivate</button>
+          </div>
+        </div>
+
+        <div class="rewards-catalog-item" style="opacity:0.6;">
+          <div>
+            <div style="font-weight:600;">Locker Room Tour</div>
+            <div style="font-size:12px; color:var(--text-muted);">Exclusive Experience</div>
+          </div>
+          <div style="font-size:14px; font-weight:700;">5,000 pts</div>
+          <span class="badge badge-waitlisted">Inactive</span>
+          <div style="display:flex; gap:var(--sp-2);">
+            <button class="btn btn-ghost btn-sm" onclick="editReward(this)">Edit</button>
+            <button class="btn btn-primary btn-sm" onclick="toggleReward(this, 'Locker Room Tour')">Activate</button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Add / Edit Reward Modal -->
+  <div class="modal-backdrop" id="reward-modal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="reward-modal-title">Add Reward</h2>
+        <button class="modal-close" onclick="document.getElementById('reward-modal').classList.remove('open')">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="reward-form">
+          <div class="form-group">
+            <label class="form-label">Reward Name</label>
+            <input class="form-input" type="text" id="reward-name" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-select" id="reward-category">
+                <option>Priority Access</option>
+                <option>Merchandise</option>
+                <option>Exclusive Experience</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Points Cost</label>
+              <input class="form-input" type="number" id="reward-points" min="1" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select class="form-select" id="reward-status">
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="document.getElementById('reward-modal').classList.remove('open')">Cancel</button>
+        <button class="btn btn-primary" onclick="saveReward()">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    document.getElementById('new-reward-btn').addEventListener('click', () => {
+      document.getElementById('reward-modal-title').textContent = 'Add Reward';
+      document.getElementById('reward-form').reset();
+      document.getElementById('reward-modal').classList.add('open');
+    });
+
+    function editReward(btn) {
+      document.getElementById('reward-modal-title').textContent = 'Edit Reward';
+      document.getElementById('reward-modal').classList.add('open');
+    }
+
+    function toggleReward(btn, name) {
+      const isActive = btn.textContent.trim() === 'Deactivate';
+      btn.textContent = isActive ? 'Activate' : 'Deactivate';
+      const row = btn.closest('.rewards-catalog-item');
+      const badge = row.querySelector('.badge');
+      if (isActive) {
+        badge.className = 'badge badge-waitlisted';
+        badge.textContent = 'Inactive';
+        row.style.opacity = '0.6';
+        btn.className = 'btn btn-primary btn-sm';
+      } else {
+        badge.className = 'badge badge-claimed';
+        badge.textContent = 'Active';
+        row.style.opacity = '1';
+        btn.className = 'btn btn-outline btn-sm';
+      }
+      showAdminToast(`"${name}" ${isActive ? 'deactivated' : 'activated'}.`);
+    }
+
+    function saveReward() {
+      document.getElementById('reward-modal').classList.remove('open');
+      showAdminToast('Reward saved.');
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No-Show Review — Red Raider Loyalty Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin-layout.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <span class="brand">Red Raider Loyalty</span>
+      <span class="subtitle">Admin Console</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+      <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</a>
+      <a href="activities.html" class="sidebar-link"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Activities &amp; Points</a>
+      <a href="rewards.html" class="sidebar-link"><svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>Rewards Catalog</a>
+      <a href="checkinwindows.html" class="sidebar-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Check-in Windows</a>
+      <a href="students.html" class="sidebar-link"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Students</a>
+      <a href="noshow.html" class="sidebar-link active"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>No-Show Review</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Madsen Cooper</div>
+      <div class="sidebar-user-role">Promotion &amp; Fan Engagement</div>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <div class="admin-content-inner">
+
+      <div class="admin-page-header">
+        <div>
+          <h1 class="admin-page-title">No-Show Review</h1>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">
+            Students have 24 hours after a game to dispute a flag. Review each dispute before any penalty is finalized.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tab bar -->
+      <div style="display:flex; gap:0; border-bottom:2px solid var(--border-light); margin-bottom:var(--sp-6);">
+        <button
+          onclick="switchTab('pending')"
+          id="tab-pending"
+          style="padding:10px 20px; font-size:14px; font-weight:600; background:none; border:none; border-bottom:2px solid var(--ttu-red); color:var(--ttu-red); cursor:pointer; margin-bottom:-2px;">
+          Pending (1)
+        </button>
+        <button
+          onclick="switchTab('resolved')"
+          id="tab-resolved"
+          style="padding:10px 20px; font-size:14px; font-weight:500; background:none; border:none; border-bottom:2px solid transparent; color:var(--text-muted); cursor:pointer; margin-bottom:-2px;">
+          Resolved
+        </button>
+      </div>
+
+      <!-- Pending Disputes -->
+      <div id="panel-pending">
+        <div class="dispute-card">
+          <div class="dispute-header">
+            <div>
+              <div class="dispute-student">Andrew Lils</div>
+              <div class="dispute-event">R11873238 · andrewl · Football vs. Texas · Sep 20, 2025</div>
+            </div>
+            <div>
+              <span class="badge badge-required">Pending</span>
+              <div style="font-size:12px; color:var(--ttu-red); font-weight:600; margin-top:4px; text-align:right;">−200 pts</div>
+            </div>
+          </div>
+          <div class="banner banner-amber" style="margin-bottom:var(--sp-3);">
+            <strong>Student dispute:</strong> "I was at the game — scanned in at Gate 5. Not sure why it didn't register."
+          </div>
+          <div style="font-size:13px; color:var(--text-secondary); margin-bottom:var(--sp-4); line-height:1.6;">
+            <strong>System log:</strong> No scan recorded for R11873238 at Football vs. Texas (Event #12). Claim confirmed. Drop window closed 24 hrs prior to game.
+          </div>
+          <div class="dispute-actions">
+            <button class="btn btn-primary btn-sm" data-action="clear-dispute">Clear flag — no penalty</button>
+            <button class="btn btn-outline btn-sm" data-action="uphold-dispute">Uphold — apply −200 pts</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resolved Disputes (hidden by default) -->
+      <div id="panel-resolved" style="display:none;">
+        <div class="card card-body">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-4);">
+            <div>
+              <div style="font-weight:600;">J.P. Williams</div>
+              <div style="font-size:12px; color:var(--text-muted);">R00401438 · Football vs. Baylor · Nov 15, 2025</div>
+            </div>
+            <span class="badge badge-claimed">Cleared</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">Flag cleared — scan log verified by staff. No penalty applied.</p>
+        </div>
+
+        <div class="card card-body" style="margin-top:var(--sp-3);">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:var(--sp-4);">
+            <div>
+              <div style="font-weight:600;">Bryce Hewatt</div>
+              <div style="font-size:12px; color:var(--text-muted);">R17171748 · Men's Basketball vs. Baylor · Feb 3, 2026</div>
+            </div>
+            <span class="badge badge-required">Upheld</span>
+          </div>
+          <p style="font-size:13px; color:var(--text-muted);">Penalty applied: −150 pts. No scan recorded. Student did not provide sufficient evidence.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    function switchTab(tab) {
+      const isPending = tab === 'pending';
+      document.getElementById('panel-pending').style.display  = isPending ? 'block' : 'none';
+      document.getElementById('panel-resolved').style.display = isPending ? 'none'  : 'block';
+
+      const pendingBtn  = document.getElementById('tab-pending');
+      const resolvedBtn = document.getElementById('tab-resolved');
+
+      pendingBtn.style.borderBottomColor  = isPending ? 'var(--ttu-red)' : 'transparent';
+      pendingBtn.style.color              = isPending ? 'var(--ttu-red)' : 'var(--text-muted)';
+      pendingBtn.style.fontWeight         = isPending ? '600' : '500';
+
+      resolvedBtn.style.borderBottomColor = isPending ? 'transparent' : 'var(--ttu-red)';
+      resolvedBtn.style.color             = isPending ? 'var(--text-muted)' : 'var(--ttu-red)';
+      resolvedBtn.style.fontWeight        = isPending ? '500' : '600';
+    }
+  </script>
+</body>
+</html>

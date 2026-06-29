@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Check-In — Red Raider Loyalty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/student-layout.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="student-header">
+    <span class="brand">Red Raider Loyalty</span>
+  </header>
+
+  <main class="page-content">
+    <div class="checkin-result">
+
+      <!-- SUCCESS STATE -->
+      <div class="checkin-success">
+        <div class="checkin-icon">✓</div>
+        <div class="checkin-headline" style="color: var(--claimed-text);">Entry Confirmed</div>
+        <div class="checkin-sub">You're in. Points have been posted to your account.</div>
+      </div>
+
+      <div class="card card-body">
+        <div class="checkin-detail-row">
+          <span class="checkin-detail-label">Name</span>
+          <span class="checkin-detail-value">Madsen Cooper</span>
+        </div>
+        <div class="checkin-detail-row">
+          <span class="checkin-detail-label">R-Number</span>
+          <span class="checkin-detail-value">R11925460</span>
+        </div>
+        <div class="checkin-detail-row">
+          <span class="checkin-detail-label">Event</span>
+          <span class="checkin-detail-value">Football vs. ACU</span>
+        </div>
+        <div class="checkin-detail-row">
+          <span class="checkin-detail-label">Claim status</span>
+          <span class="checkin-detail-value" style="color: var(--claimed-text);">Confirmed — Above cutline</span>
+        </div>
+        <div class="checkin-detail-row">
+          <span class="checkin-detail-label">Points posted</span>
+          <span class="checkin-detail-value" style="color: var(--claimed-text);">+100 pts</span>
+        </div>
+        <div class="checkin-detail-row">
+          <span class="checkin-detail-label">Season total</span>
+          <span class="checkin-detail-value">2,940 pts</span>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--text-muted); text-align:center; margin-top:var(--sp-5); line-height:1.6;">
+        Be in line at least 15 minutes before kickoff.<br>
+        A no-show is recorded if you claimed a spot and don't scan in.
+      </p>
+
+      <!-- DENIED STATE (hidden by default — toggle for demo) -->
+      <div id="denied-example" style="display:none; margin-top: var(--sp-6);">
+        <div class="checkin-fail">
+          <div class="checkin-icon">✗</div>
+          <div class="checkin-headline" style="color: var(--ttu-red);">Entry Denied</div>
+          <div class="checkin-sub">No confirmed claim found for this ID at this event.</div>
+        </div>
+        <div class="banner banner-amber">
+          <strong>Fee-paid students without a claim:</strong> Head to the student waitlist area. Entry is not guaranteed and depends on available capacity.
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="student-footer">
+    Texas Tech Athletics · Red Raider Loyalty
+  </footer>
+
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/student.js"></script>
+</body>
+</html>

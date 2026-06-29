@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Activities & Points — Red Raider Loyalty Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin-layout.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <span class="brand">Red Raider Loyalty</span>
+      <span class="subtitle">Admin Console</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+      <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</a>
+      <a href="activities.html" class="sidebar-link active"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Activities &amp; Points</a>
+      <a href="rewards.html" class="sidebar-link"><svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>Rewards Catalog</a>
+      <a href="checkinwindows.html" class="sidebar-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Check-in Windows</a>
+      <a href="students.html" class="sidebar-link"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Students</a>
+      <a href="noshow.html" class="sidebar-link"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>No-Show Review</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Madsen Cooper</div>
+      <div class="sidebar-user-role">Promotion &amp; Fan Engagement</div>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <div class="admin-content-inner">
+
+      <div class="admin-page-header">
+        <h1 class="admin-page-title">Activities &amp; Points</h1>
+        <button class="btn btn-primary" onclick="showAdminToast('Changes saved.')">Save changes</button>
+      </div>
+
+      <!-- Class Standing Points -->
+      <div style="font-size:16px; font-weight:700; margin-bottom:var(--sp-4);">Class Standing — Starting Points</div>
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:var(--sp-5); line-height:1.6;">
+        Each student receives these points at the start of the season based on their class. Returning Raiders also carry over points from prior seasons.
+      </p>
+
+      <div class="points-config-grid" style="margin-bottom:var(--sp-8);">
+        <div class="points-config-card">
+          <div class="points-config-class">Freshman</div>
+          <div class="points-config-value">
+            <input type="number" value="100" style="width:80px; font-size:26px; font-weight:800; color:var(--ttu-red); border:none; text-align:center; background:transparent; font-family:var(--font-body);">
+          </div>
+          <div class="points-config-pts">starting pts</div>
+        </div>
+        <div class="points-config-card">
+          <div class="points-config-class">Sophomore</div>
+          <div class="points-config-value">
+            <input type="number" value="200" style="width:80px; font-size:26px; font-weight:800; color:var(--ttu-red); border:none; text-align:center; background:transparent; font-family:var(--font-body);">
+          </div>
+          <div class="points-config-pts">starting pts</div>
+        </div>
+        <div class="points-config-card">
+          <div class="points-config-class">Junior</div>
+          <div class="points-config-value">
+            <input type="number" value="350" style="width:80px; font-size:26px; font-weight:800; color:var(--ttu-red); border:none; text-align:center; background:transparent; font-family:var(--font-body);">
+          </div>
+          <div class="points-config-pts">starting pts</div>
+        </div>
+        <div class="points-config-card">
+          <div class="points-config-class">Senior</div>
+          <div class="points-config-value">
+            <input type="number" value="500" style="width:80px; font-size:26px; font-weight:800; color:var(--ttu-red); border:none; text-align:center; background:transparent; font-family:var(--font-body);">
+          </div>
+          <div class="points-config-pts">starting pts</div>
+        </div>
+      </div>
+
+      <!-- Event Attendance Points -->
+      <div style="font-size:16px; font-weight:700; margin-bottom:var(--sp-4);">Event Attendance Points — By Tier</div>
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:var(--sp-5); line-height:1.6;">
+        Points posted automatically when a student scans in with their physical ID. High-impact events give the biggest boost.
+      </p>
+
+      <div class="card">
+        <div class="card-body-sm" style="padding:0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Sports</th>
+                <th style="width:150px;">Points per Scan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <span class="badge badge-high-impact">High-Impact</span>
+                </td>
+                <td style="font-size:13px; color:var(--text-secondary);">Football, Men's Basketball (marquee matchups)</td>
+                <td>
+                  <input type="number" value="150" class="form-input" style="width:100px;">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span style="font-size:13px; font-weight:600;">Standard</span>
+                </td>
+                <td style="font-size:13px; color:var(--text-secondary);">Football, Men's &amp; Women's Basketball (standard)</td>
+                <td>
+                  <input type="number" value="100" class="form-input" style="width:100px;">
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <span style="font-size:13px; font-weight:600;">Lower Demand</span>
+                </td>
+                <td style="font-size:13px; color:var(--text-secondary);">Soccer, Volleyball, Baseball, Softball &amp; more</td>
+                <td>
+                  <input type="number" value="50" class="form-input" style="width:100px;">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- No-Show Penalty -->
+      <div style="font-size:16px; font-weight:700; margin-top:var(--sp-8); margin-bottom:var(--sp-4);">No-Show Penalty Points</div>
+      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:var(--sp-5); line-height:1.6;">
+        Applied when a student claims a spot and doesn't scan in. Students have 24 hours to dispute before any penalty is finalized.
+      </p>
+
+      <div class="card">
+        <div class="card-body-sm" style="padding:0;">
+          <table class="data-table">
+            <thead>
+              <tr><th>Event Tier</th><th style="width:150px;">Point Penalty</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-high-impact">High-Impact</span></td>
+                <td><input type="number" value="200" class="form-input" style="width:100px;"></td>
+              </tr>
+              <tr>
+                <td><span style="font-size:13px; font-weight:600;">Standard</span></td>
+                <td><input type="number" value="150" class="form-input" style="width:100px;"></td>
+              </tr>
+              <tr>
+                <td><span style="font-size:13px; font-weight:600;">Lower Demand</span></td>
+                <td><input type="number" value="75" class="form-input" style="width:100px;"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SVC Threshold -->
+      <div style="font-size:16px; font-weight:700; margin-top:var(--sp-8); margin-bottom:var(--sp-4);">Student Victory Club</div>
+      <div class="panel-grid" style="margin-bottom:0;">
+        <div class="form-group">
+          <label class="form-label">SVC Points Threshold</label>
+          <input class="form-input" type="number" value="5680" placeholder="e.g. 5680">
+          <p style="font-size:12px; color:var(--text-muted); margin-top:var(--sp-2);">Students at or above this season total are eligible for SVC membership pricing.</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Max No-Shows for Rebate Eligibility</label>
+          <input class="form-input" type="number" value="2" placeholder="e.g. 2">
+          <p style="font-size:12px; color:var(--text-muted); margin-top:var(--sp-2);">SVC members with this many or fewer no-shows earn a renewal rebate for the following year.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>

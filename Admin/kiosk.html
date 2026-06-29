@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kiosk — Red Raider Loyalty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin-layout.css">
+  <style>
+    /* Kiosk is fullscreen — no sidebar */
+    body { background: var(--bg-cream); }
+    .kiosk-wrapper {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--sp-8) var(--sp-6);
+    }
+    .kiosk-header-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: var(--ttu-red);
+      padding: 12px var(--sp-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+    .kiosk-header-brand {
+      font-family: var(--font-brand);
+      font-size: 22px;
+      color: white;
+      font-weight: 700;
+    }
+    .kiosk-event-name {
+      font-size: 13px;
+      color: rgba(255,255,255,0.8);
+      font-weight: 500;
+    }
+    .kiosk-exit {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .kiosk-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: var(--sp-8) var(--sp-8);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+      margin-top: 60px;
+    }
+    .kiosk-result-area {
+      margin-top: var(--sp-6);
+      min-height: 80px;
+    }
+    .result-success {
+      background: var(--claimed-bg);
+      border: 2px solid var(--claimed-text);
+      border-radius: var(--radius-md);
+      padding: var(--sp-6);
+      animation: fadeIn 0.2s ease;
+    }
+    .result-deny {
+      background: #FEF2F2;
+      border: 2px solid var(--ttu-red);
+      border-radius: var(--radius-md);
+      padding: var(--sp-6);
+      animation: fadeIn 0.2s ease;
+    }
+    .result-icon { font-size: 40px; margin-bottom: var(--sp-2); }
+    .result-headline { font-size: 20px; font-weight: 800; }
+    .result-sub { font-size: 13px; color: var(--text-secondary); margin-top: var(--sp-2); }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+    /* Auto-clear timer bar */
+    .timer-bar {
+      height: 3px;
+      background: var(--border-light);
+      border-radius: 99px;
+      margin-top: var(--sp-4);
+      overflow: hidden;
+    }
+    .timer-bar-fill {
+      height: 100%;
+      background: var(--claimed-text);
+      border-radius: 99px;
+      transition: width linear;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed top bar -->
+  <div class="kiosk-header-bar">
+    <span class="kiosk-header-brand">Red Raider Loyalty</span>
+    <span class="kiosk-event-name">Football vs. ACU · Sep 12, 2026</span>
+    <a href="dashboard.html" class="kiosk-exit">Exit kiosk</a>
+  </div>
+
+  <div class="kiosk-wrapper">
+    <div class="kiosk-card">
+
+      <div style="font-size:15px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:var(--sp-2);">
+        Student Check-In
+      </div>
+      <p style="font-size:14px; color:var(--text-secondary); margin-bottom:var(--sp-6); line-height:1.6;">
+        Enter the student's R-Number or scan their physical student ID.
+      </p>
+
+      <form id="kiosk-form">
+        <input
+          class="kiosk-input"
+          id="kiosk-input"
+          type="text"
+          placeholder="R11925460"
+          autocomplete="off"
+          autocorrect="off"
+          spellcheck="false"
+          autofocus>
+        <p class="kiosk-hint">Physical ID required — no screenshots or digital copies accepted</p>
+        <button type="submit" class="btn btn-primary btn-full" style="font-size:16px; padding:14px;">
+          Check In
+        </button>
+      </form>
+
+      <!-- Result area -->
+      <div class="kiosk-result-area" id="kiosk-result"></div>
+
+    </div>
+
+    <!-- Recent scan log -->
+    <div style="width:100%; max-width:500px; margin-top:var(--sp-6);">
+      <div style="font-size:13px; font-weight:700; color:var(--text-muted); margin-bottom:var(--sp-3); text-transform:uppercase; letter-spacing:0.05em;">
+        Recent scans
+      </div>
+      <div id="scan-log" style="display:flex; flex-direction:column; gap:var(--sp-2);">
+        <div style="display:flex; justify-content:space-between; align-items:center; background:white; border-radius:var(--radius-sm); padding:var(--sp-3) var(--sp-4); border:1px solid var(--border-light); font-size:13px;">
+          <span style="font-weight:600;">R11873238 — Andrew Lils</span>
+          <span style="color:var(--claimed-text); font-weight:700;">✓ Entry confirmed</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; background:white; border-radius:var(--radius-sm); padding:var(--sp-3) var(--sp-4); border:1px solid var(--border-light); font-size:13px;">
+          <span style="font-weight:600;">R17171748 — Bryce Hewatt</span>
+          <span style="color:var(--claimed-text); font-weight:700;">✓ Entry confirmed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    /* Mock student lookup — replace with POST /api/admin/checkin */
+    const MOCK_LOOKUP = {
+      'R11873238': { name: 'Andrew Lils',   status: 'confirmed', pts: 100 },
+      'R17171748': { name: 'Bryce Hewatt',  status: 'confirmed', pts: 100 },
+      'R00401438': { name: 'J.P. Williams', status: 'confirmed', pts: 100 },
+      'R11925460': { name: 'Madsen Cooper', status: 'confirmed', pts: 100 },
+      'R11984332': { name: 'Will Shoaf',    status: 'waitlist',  pts: 0   },
+    };
+
+    let clearTimer = null;
+
+    document.getElementById('kiosk-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const raw = document.getElementById('kiosk-input').value.trim().toUpperCase();
+      if (!raw) return;
+
+      const student = MOCK_LOOKUP[raw];
+      const result  = document.getElementById('kiosk-result');
+
+      clearTimeout(clearTimer);
+
+      if (student && student.status === 'confirmed') {
+        result.innerHTML = `
+          <div class="result-success">
+            <div class="result-icon">✓</div>
+            <div class="result-headline" style="color:var(--claimed-text);">Entry Confirmed</div>
+            <div class="result-sub">${student.name} · ${raw}</div>
+            <div style="margin-top:8px; font-size:13px; font-weight:600; color:var(--claimed-text);">+${student.pts} pts posted</div>
+          </div>
+          <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%;"></div></div>`;
+        addScanLog(raw, student.name, true);
+      } else if (student && student.status === 'waitlist') {
+        result.innerHTML = `
+          <div class="result-deny">
+            <div class="result-icon">→</div>
+            <div class="result-headline" style="color:var(--ttu-red);">Waitlist Area</div>
+            <div class="result-sub">${student.name} · ${raw}<br>No confirmed claim — direct to student waitlist area.</div>
+          </div>
+          <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%; background:var(--ttu-red);"></div></div>`;
+        addScanLog(raw, student.name, false);
+      } else {
+        result.innerHTML = `
+          <div class="result-deny">
+            <div class="result-icon">✗</div>
+            <div class="result-headline" style="color:var(--ttu-red);">Not Found</div>
+            <div class="result-sub">${raw}<br>No record found. Verify the ID and try again, or direct to gate staff.</div>
+          </div>
+          <div class="timer-bar"><div class="timer-bar-fill" id="timer-fill" style="width:100%; background:var(--ttu-red);"></div></div>`;
+      }
+
+      document.getElementById('kiosk-input').value = '';
+      document.getElementById('kiosk-input').focus();
+
+      /* Auto-clear result after 4 seconds */
+      const fill = document.getElementById('timer-fill');
+      if (fill) {
+        requestAnimationFrame(() => {
+          fill.style.transition = 'width 4s linear';
+          fill.style.width = '0%';
+        });
+      }
+      clearTimer = setTimeout(() => {
+        result.innerHTML = '';
+      }, 4000);
+    });
+
+    function addScanLog(rNumber, name, success) {
+      const log  = document.getElementById('scan-log');
+      const item = document.createElement('div');
+      item.style.cssText = 'display:flex; justify-content:space-between; align-items:center; background:white; border-radius:6px; padding:12px 16px; border:1px solid var(--border-light); font-size:13px;';
+      item.innerHTML = `
+        <span style="font-weight:600;">${rNumber} — ${name}</span>
+        <span style="color:${success ? 'var(--claimed-text)' : 'var(--ttu-red)'}; font-weight:700;">
+          ${success ? '✓ Entry confirmed' : '→ Waitlist area'}
+        </span>`;
+      log.insertBefore(item, log.firstChild);
+      /* Keep log to last 10 scans */
+      while (log.children.length > 10) log.removeChild(log.lastChild);
+    }
+  </script>
+</body>
+</html>

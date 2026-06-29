@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Red Raider Loyalty Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin-layout.css">
+</head>
+<body class="admin-body">
+
+  <!-- ── Sidebar ── -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <span class="brand">Red Raider Loyalty</span>
+      <span class="subtitle">Admin Console</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link active">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a href="events.html" class="sidebar-link">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Events
+      </a>
+      <a href="activities.html" class="sidebar-link">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Activities &amp; Points
+      </a>
+      <a href="rewards.html" class="sidebar-link">
+        <svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+        Rewards Catalog
+      </a>
+      <a href="checkinwindows.html" class="sidebar-link">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Check-in Windows
+      </a>
+      <a href="students.html" class="sidebar-link">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Students
+      </a>
+      <a href="noshow.html" class="sidebar-link">
+        <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        No-Show Review
+      </a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Madsen Cooper</div>
+      <div class="sidebar-user-role">Promotion &amp; Fan Engagement</div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ── -->
+  <main class="admin-content">
+    <div class="admin-content-inner">
+
+      <!-- Event Selector -->
+      <div class="event-selector-row">
+        <div>
+          <div class="event-selector-name">Football vs. ACU</div>
+          <div class="event-selector-sub">Reservation Required · Capacity 9,500</div>
+        </div>
+        <div class="event-dropdown-wrapper">
+          <select id="event-selector" onchange="switchEvent(this.value)">
+            <option value="2" selected>Football vs. ACU</option>
+            <option value="1">Football vs. Kansas</option>
+            <option value="3">Men's Basketball vs. Iowa State</option>
+            <option value="4">Soccer vs. Texas</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="dashboard-stats">
+        <div class="dashboard-stat">
+          <div class="dashboard-stat-label">Reservations</div>
+          <div class="dashboard-stat-value">7,834</div>
+          <div class="dashboard-stat-sub"><span class="link">live count</span></div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="dashboard-stat-label">Projected Turnout</div>
+          <div class="dashboard-stat-value">5,210</div>
+          <div class="dashboard-stat-sub">67% show rate</div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="dashboard-stat-label">Capacity Used</div>
+          <div class="dashboard-stat-value">55%</div>
+          <div class="dashboard-stat-sub" style="color:var(--ttu-red);">4,290 spots remain</div>
+        </div>
+        <div class="dashboard-stat">
+          <div class="dashboard-stat-label">No-Show Flags Pending</div>
+          <div class="dashboard-stat-value">1</div>
+          <div class="dashboard-stat-sub"><a href="noshow.html" style="color:var(--ttu-red); font-weight:600;">review now</a></div>
+        </div>
+      </div>
+
+      <!-- Two-panel row -->
+      <div class="panel-grid">
+
+        <!-- Game Week Timeline -->
+        <div class="panel">
+          <div class="panel-title">Reservations — game week</div>
+          <div class="timeline">
+            <div class="timeline-row">
+              <div class="timeline-day">Mon 8 AM</div>
+              <div>
+                <div class="timeline-window-name">Reservation Window Opens</div>
+                <div class="timeline-window-time">Sep 8, 2026 · 8:00 AM CT</div>
+                <span class="timeline-badge timeline-badge-closed">Closed</span>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-day">Tue Noon</div>
+              <div>
+                <div class="timeline-window-name">Reservation Window Closes</div>
+                <div class="timeline-window-time">Sep 9, 2026 · 12:00 PM CT</div>
+                <span class="timeline-badge timeline-badge-closed">Closed</span>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-day">Tue 2 PM</div>
+              <div>
+                <div class="timeline-window-name">Claim Window Opens</div>
+                <div class="timeline-window-time">Sep 9, 2026 · 2:00 PM CT</div>
+                <span class="timeline-badge timeline-badge-open">Open</span>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-day">Wed 5 PM</div>
+              <div>
+                <div class="timeline-window-name">Claim Window Closes</div>
+                <div class="timeline-window-time">Sep 10, 2026 · 5:00 PM CT</div>
+                <span class="timeline-badge timeline-badge-upcoming">Upcoming</span>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-day">Wed 5:01 PM</div>
+              <div>
+                <div class="timeline-window-name">Waitlist Cascade</div>
+                <div class="timeline-window-time">Unclaimed spots released to waitlist</div>
+                <span class="timeline-badge timeline-badge-upcoming">Upcoming</span>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-day">Thu 8 AM</div>
+              <div>
+                <div class="timeline-window-name">Open Claim</div>
+                <div class="timeline-window-time">Sep 11, 2026 · 8:00 AM CT</div>
+                <span class="timeline-badge timeline-badge-upcoming">Upcoming</span>
+              </div>
+            </div>
+            <div class="timeline-row">
+              <div class="timeline-day">Fri 24 hrs out</div>
+              <div>
+                <div class="timeline-window-name">Drop Window Closes</div>
+                <div class="timeline-window-time">Sep 11, 2026 · 11:00 AM CT</div>
+                <span class="timeline-badge timeline-badge-upcoming">Upcoming</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Selection & Stats -->
+        <div class="panel">
+          <div class="panel-title">Selection &amp; stats</div>
+          <div class="action-btn-stack">
+            <button class="btn btn-primary" id="run-selection-btn">Run selection (draw)</button>
+            <button class="btn btn-outline" id="run-noshow-btn">Run no-show sweep</button>
+            <button class="btn btn-ghost" id="recompute-btn">Recompute stats</button>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="panel-title">Selection notes</div>
+          <p style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
+            Students above the cutline are <strong>confirmed automatically</strong> — no draw needed for them. The weighted draw only applies to students at the cutline boundary. Higher points = higher priority.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- No-Show Disputes -->
+      <div class="panel">
+        <div class="panel-title">No-show disputes (pending)</div>
+        <div class="dispute-card">
+          <div class="dispute-header">
+            <div>
+              <div class="dispute-student">Andrew Lils — R11873238</div>
+              <div class="dispute-event">Football vs. Texas · Sep 20, 2025</div>
+            </div>
+            <span class="badge badge-required">Pending</span>
+          </div>
+          <p class="dispute-note">"I was at the game — scanned in at Gate 5. Not sure why it didn't register."</p>
+          <div class="dispute-actions">
+            <button class="btn btn-primary btn-sm" data-action="clear-dispute">Clear flag</button>
+            <button class="btn btn-outline btn-sm" data-action="uphold-dispute">Uphold penalty</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/admin.js"></script>
+  <script>
+    function switchEvent(id) {
+      /* TODO: reload dashboard data for selected event ID */
+      console.log('Switch to event', id);
+    }
+  </script>
+</body>
+</html>

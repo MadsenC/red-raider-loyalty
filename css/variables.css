@@ -1,0 +1,75 @@
+/* ─── Design Tokens ──────────────────────────────────────────────────────── */
+:root {
+  /* TTU Brand */
+  --ttu-red:        #CC0000;
+  --ttu-red-dark:   #A30000;
+  --ttu-red-deeper: #7A0000;
+
+  /* Backgrounds */
+  --bg-cream:   #F5F0EB;
+  --bg-white:   #FFFFFF;
+  --bg-subtle:  #FAF7F4;
+
+  /* Admin Sidebar */
+  --sidebar-bg:        #18100E;
+  --sidebar-hover:     #2C1A17;
+  --sidebar-active:    #3D2420;
+  --sidebar-border:    #2E1A17;
+
+  /* Text */
+  --text-primary:   #1A1A1A;
+  --text-secondary: #4A4A4A;
+  --text-muted:     #888888;
+  --text-white:     #FFFFFF;
+
+  /* Borders */
+  --border-light:  #E8E2DB;
+  --border-medium: #D0C5BB;
+
+  /* Status — Claimed */
+  --claimed-text: #1B7A3B;
+  --claimed-bg:   #E6F5EC;
+
+  /* Status — High Impact */
+  --impact-text: #92400E;
+  --impact-bg:   #FEF3C7;
+
+  /* Status — Claim Your Spot */
+  --claim-text: #1D4ED8;
+  --claim-bg:   #DBEAFE;
+
+  /* Status — Waitlisted */
+  --wait-text: #78350F;
+  --wait-bg:   #FFF7ED;
+
+  /* Status — Open Claim */
+  --open-text: #5B21B6;
+  --open-bg:   #EDE9FE;
+
+  /* Status — Confirmed */
+  --confirm-text: #065F46;
+
+  /* Typography */
+  --font-body:  'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-brand: 'Dancing Script', cursive;
+
+  /* Spacing Scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.07);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
+}

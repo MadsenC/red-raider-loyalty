@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Reservations — Red Raider Loyalty</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/student-layout.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="student-header">
+    <span class="brand">Red Raider Loyalty</span>
+  </header>
+
+  <nav class="student-nav">
+    <a href="home.html" class="nav-item" data-page="home">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z"/><polyline points="9 21 9 12 15 12 15 21"/></svg>
+      Home
+    </a>
+    <a href="reservations.html" class="nav-item active" data-page="reservations">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reservations
+    </a>
+    <a href="rewards.html" class="nav-item" data-page="rewards">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+      Rewards
+    </a>
+    <a href="activity.html" class="nav-item" data-page="activity">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Activity
+    </a>
+  </nav>
+
+  <main class="page-content">
+
+    <h1 class="section-title">Reservations</h1>
+    <p class="reservations-header">Season points: 2,840</p>
+
+    <div class="event-list">
+
+      <!-- Claimed + Confirmed (above cutline) -->
+      <div class="event-item">
+        <div class="event-item-badges">
+          <span class="badge badge-claimed">Claimed</span>
+          <span class="badge badge-high-impact">High-Impact</span>
+        </div>
+        <div class="event-item-name">Men's Basketball vs. Iowa State</div>
+        <div class="event-item-meta">Men's Basketball · Jan 10, 2026 1:00 PM CT</div>
+        <div class="event-item-action">
+          <div class="confirm-line">
+            <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Confirmed — above the cutline
+          </div>
+          <button
+            class="btn btn-outline btn-sm"
+            data-action="drop-spot"
+            data-event-id="3">
+            Drop my spot
+          </button>
+        </div>
+        <div style="margin-top: var(--sp-3); padding-top: var(--sp-3); border-top: 1px solid var(--border-light); font-size: 12px; color: var(--text-muted);">
+          Show your physical student ID at the gate · Drop window closes Jan 9, 2:00 PM CT
+        </div>
+      </div>
+
+      <!-- Claim Window Open -->
+      <div class="event-item">
+        <div class="event-item-badges">
+          <span class="badge badge-claim">Claim Your Spot</span>
+        </div>
+        <div class="event-item-name">Football vs. ACU</div>
+        <div class="event-item-meta">Football · Sep 12, 2026 11:00 AM CT</div>
+        <div class="event-item-action">
+          <div class="confirm-line">
+            <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Confirmed — above the cutline
+          </div>
+          <button
+            class="btn btn-primary btn-sm"
+            data-action="claim-spot"
+            data-event-id="2"
+            data-event-name="Football vs. ACU">
+            Claim your spot
+          </button>
+        </div>
+      </div>
+
+      <!-- Waitlisted -->
+      <div class="event-item">
+        <div class="event-item-badges">
+          <span class="badge badge-waitlisted">Waitlisted</span>
+          <span class="badge badge-high-impact">High-Impact</span>
+        </div>
+        <div class="event-item-name">Football vs. Texas</div>
+        <div class="event-item-meta">Football · Oct 3, 2026 7:00 PM CT</div>
+        <div class="event-item-status">
+          You're on the waitlist. Keep notifications on — you'll be alerted if a spot opens during claim week.
+        </div>
+      </div>
+
+      <!-- Open Claim Available -->
+      <div class="event-item">
+        <div class="event-item-badges">
+          <span class="badge badge-open">Open Claim</span>
+          <span class="badge badge-high-impact">High-Impact</span>
+        </div>
+        <div class="event-item-name">Football vs. Kansas State</div>
+        <div class="event-item-meta">Football · Nov 14, 2026 7:00 PM CT</div>
+        <div class="event-item-action">
+          <span class="event-item-status">Spots still available — first come, first claimed.</span>
+          <button
+            class="btn btn-primary btn-sm"
+            data-action="claim-spot"
+            data-event-id="5"
+            data-event-name="Football vs. Kansas State">
+            Claim your spot
+          </button>
+        </div>
+      </div>
+
+      <!-- Reservation Window Upcoming -->
+      <div class="event-item">
+        <div class="event-item-badges">
+          <span class="badge badge-required">Reservation Required</span>
+          <span class="badge badge-high-impact">High-Impact</span>
+        </div>
+        <div class="event-item-name">Football vs. Kansas</div>
+        <div class="event-item-meta">Football · Sep 5, 2026 2:00 PM CT</div>
+        <div class="event-item-action">
+          <span class="event-item-status">Reservation window opens Mon, Sep 1 at 8 AM CT</span>
+        </div>
+      </div>
+
+      <!-- Open Sport — Lower Demand -->
+      <div class="event-item">
+        <div class="event-item-badges">
+          <span class="badge badge-claimed">Confirmed</span>
+        </div>
+        <div class="event-item-name">Soccer vs. Texas</div>
+        <div class="event-item-meta">Soccer · Sep 18, 2026 7:00 PM CT</div>
+        <div class="confirm-line" style="margin-top: var(--sp-2);">
+          <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Reserved — show your physical student ID at the gate
+        </div>
+      </div>
+
+    </div><!-- /event-list -->
+
+    <!-- How It Works callout -->
+    <div class="banner banner-blue" style="margin-top: var(--sp-6);">
+      <strong>How reservation weeks work for Saturday games:</strong><br>
+      Mon 8 AM – Reservation window opens &nbsp;·&nbsp; Tue noon – Closes<br>
+      Tue 2 PM – Claim window opens &nbsp;·&nbsp; Wed 5 PM – Closes<br>
+      Wed 5:01 PM – Waitlist cascade &nbsp;·&nbsp; Thu 8 AM – Open claim<br>
+      Fri (24 hrs out) – Drop window closes
+    </div>
+
+  </main>
+
+  <footer class="student-footer">
+    Texas Tech Athletics · Red Raider Loyalty
+  </footer>
+
+</div><!-- /app-shell -->
+
+<!-- Drop Spot Modal -->
+<div class="modal-backdrop" id="drop-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Drop your spot?</h2>
+      <button class="modal-close" id="drop-cancel">×</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:14px; line-height:1.6; color:var(--text-secondary);">
+        Dropping before the drop window closes means no penalty. A waitlisted Raider will get your spot.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="drop-cancel">Cancel</button>
+      <button class="btn btn-primary" id="drop-confirm">Yes, drop my spot</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/data.js"></script>
+<script src="../js/student.js"></script>
+</body>
+</html>

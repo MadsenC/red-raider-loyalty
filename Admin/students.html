@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Students — Red Raider Loyalty Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/admin-layout.css">
+</head>
+<body class="admin-body">
+
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">
+      <span class="brand">Red Raider Loyalty</span>
+      <span class="subtitle">Admin Console</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Dashboard</a>
+      <a href="events.html" class="sidebar-link"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Events</a>
+      <a href="activities.html" class="sidebar-link"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Activities &amp; Points</a>
+      <a href="rewards.html" class="sidebar-link"><svg viewBox="0 0 24 24"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>Rewards Catalog</a>
+      <a href="checkinwindows.html" class="sidebar-link"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>Check-in Windows</a>
+      <a href="students.html" class="sidebar-link active"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Students</a>
+      <a href="noshow.html" class="sidebar-link"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>No-Show Review</a>
+    </nav>
+    <div class="sidebar-user">
+      <div class="sidebar-user-name">Madsen Cooper</div>
+      <div class="sidebar-user-role">Promotion &amp; Fan Engagement</div>
+    </div>
+  </aside>
+
+  <main class="admin-content">
+    <div class="admin-content-inner">
+
+      <div class="admin-page-header">
+        <h1 class="admin-page-title">Students</h1>
+      </div>
+
+      <!-- Search -->
+      <div class="search-bar-row">
+        <input
+          class="search-input"
+          id="student-search"
+          type="text"
+          placeholder="Name, R-Number, or eRaider…">
+        <button class="btn btn-primary">Search</button>
+      </div>
+
+      <!-- Students Table -->
+      <div class="card">
+        <div class="card-body-sm" style="padding:0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>R-Number</th>
+                <th>eRaider</th>
+                <th>Class</th>
+                <th>Fee</th>
+                <th>Season Pts</th>
+                <th>Lifetime</th>
+                <th>No-Shows</th>
+              </tr>
+            </thead>
+            <tbody id="students-tbody">
+              <tr>
+                <td style="font-weight:600;">Andrew Lils</td>
+                <td style="font-size:13px; color:var(--text-muted);">R11873238</td>
+                <td style="font-size:13px;">andrewl</td>
+                <td>SR</td>
+                <td><span class="badge badge-claimed" style="font-size:10px;">✓</span></td>
+                <td style="font-weight:600;">100</td>
+                <td>1,200</td>
+                <td style="color:var(--ttu-red); font-weight:600;">1</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">Bryce Hewatt</td>
+                <td style="font-size:13px; color:var(--text-muted);">R17171748</td>
+                <td style="font-size:13px;">brewatt</td>
+                <td>JR</td>
+                <td><span class="badge badge-claimed" style="font-size:10px;">✓</span></td>
+                <td style="font-weight:600;">0</td>
+                <td>0</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">J.P. Williams</td>
+                <td style="font-size:13px; color:var(--text-muted);">R00401438</td>
+                <td style="font-size:13px;">williJP</td>
+                <td>SR</td>
+                <td><span class="badge badge-claimed" style="font-size:10px;">✓</span></td>
+                <td style="font-weight:600;">100</td>
+                <td>850</td>
+                <td>0</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">Madsen Cooper</td>
+                <td style="font-size:13px; color:var(--text-muted);">R11925460</td>
+                <td style="font-size:13px;">madscoop</td>
+                <td>SR</td>
+                <td><span class="badge badge-claimed" style="font-size:10px;">✓</span></td>
+                <td style="font-weight:600;">2,840</td>
+                <td>8,420</td>
+                <td style="color:var(--ttu-red); font-weight:600;">1</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">Will Shoaf</td>
+                <td style="font-size:13px; color:var(--text-muted);">R11984332</td>
+                <td style="font-size:13px;">wshoaf</td>
+                <td>FR</td>
+                <td><span class="badge badge-claimed" style="font-size:10px;">✓</span></td>
+                <td style="font-weight:600;">0</td>
+                <td>100</td>
+                <td>0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <p style="font-size:12px; color:var(--text-muted); margin-top:var(--sp-4);">
+        Enrollment and fee status synced from TTU internal database. Points updated in real time at scan-in.
+      </p>
+
+    </div>
+  </main>
+
+  <script src="../js/data.js"></script>
+  <script src="../js/admin.js"></script>
+</body>
+</html>
