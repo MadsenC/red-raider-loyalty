@@ -1,13 +1,20 @@
-/* ── API Utility ── */
+/* ── API Utility ──
+   Supports both:
+   - Cookie auth (local Express server, same-origin)
+   - JWT Bearer auth (Cloudflare Workers, cross-origin)
+*/
+
+const _base = () => (typeof window !== 'undefined' && window.API_BASE) || '';
 
 async function api(method, path, body) {
-  const opts = {
-    method,
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'same-origin',
-  };
+  const token = localStorage.getItem('rr_token');
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const opts = { method, headers, credentials: 'same-origin' };
   if (body) opts.body = JSON.stringify(body);
-  const res  = await fetch(path, opts);
+
+  const res  = await fetch(_base() + path, opts);
   const data = await res.json().catch(() => ({}));
   if (!res.ok) throw Object.assign(new Error(data.error || 'Request failed'), { status: res.status, data });
   return data;
@@ -22,16 +29,16 @@ const API = {
   auth: {
     me:     ()         => API.get('/api/auth/me'),
     login:  (e, p)     => API.post('/api/auth/login',  { erider: e, password: p }),
-    logout: ()         => API.post('/api/auth/logout'),
+    logout: ()         => API.post('/api/auth/logout').finally(() => localStorage.removeItem('rr_token')),
   },
   student: {
-    events:  ()        => API.get('/api/student/events'),
-    activity:()        => API.get('/api/student/activity'),
-    rewards: ()        => API.get('/api/student/rewards'),
-    reserve: (id)      => API.post(`/api/student/reserve/${id}`),
-    claim:   (id)      => API.post(`/api/student/claim/${id}`),
-    drop:    (id)      => API.post(`/api/student/drop/${id}`),
-    redeem:  (id)      => API.post(`/api/student/redeem/${id}`),
+    events:   ()       => API.get('/api/student/events'),
+    activity: ()       => API.get('/api/student/activity'),
+    rewards:  ()       => API.get('/api/student/rewards'),
+    reserve:  (id)     => API.post(`/api/student/reserve/${id}`),
+    claim:    (id)     => API.post(`/api/student/claim/${id}`),
+    drop:     (id)     => API.post(`/api/student/drop/${id}`),
+    redeem:   (id)     => API.post(`/api/student/redeem/${id}`),
   },
   admin: {
     events:         ()     => API.get('/api/admin/events'),
@@ -58,14 +65,21 @@ async function requireLogin(adminOnly = false) {
   try {
     const me = await API.auth.me();
     if (adminOnly && me.role !== 'admin') {
-      window.location.href = '/login.html';
+      window.location.href = _loginUrl();
       return null;
     }
     return me;
   } catch (e) {
-    window.location.href = '/login.html';
+    window.location.href = _loginUrl();
     return null;
   }
+}
+
+function _loginUrl() {
+  /* Works on localhost AND GitHub Pages (/red-raider-loyalty/login.html) */
+  const parts = location.pathname.split('/');
+  const base  = parts.slice(0, parts.lastIndexOf(parts.find(p => p.endsWith('.html')) || '') || parts.length - 1).join('/');
+  return (base || '') + '/login.html';
 }
 
 function toast(msg, type = 'default') {
@@ -105,7 +119,6 @@ function fmtDateTime(iso) {
 function dayTime(iso) {
   if (!iso) return '';
   const d = new Date(iso);
-  const day  = d.toLocaleDateString('en-US',{weekday:'short'});
-  const time = d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
-  return `${day} · ${time}`;
+  return d.toLocaleDateString('en-US',{weekday:'short'}) + ' · ' +
+    d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
 }

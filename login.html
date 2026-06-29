@@ -157,7 +157,10 @@
     <p class="footer-note">Texas Tech University Athletics · <a href="mailto:studentloyalty@ttu.edu" style="color:#CC0000;">studentloyalty@ttu.edu</a></p>
   </div>
 
+  <script src="js/config.js"></script>
   <script>
+    const _apiBase = () => window.API_BASE || '';
+
     async function handleLogin(e) {
       e.preventDefault();
       const erider = document.getElementById('erider').value.trim();
@@ -172,7 +175,7 @@
       btn.textContent = 'Signing in…';
 
       try {
-        const res = await fetch('/api/auth/login', {
+        const res = await fetch(_apiBase() + '/api/auth/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'same-origin',
@@ -186,7 +189,11 @@
           errEl.textContent = data.error || 'Sign-in failed.';
           errEl.style.display = 'block';
         } else {
-          window.location.href = data.role === 'admin' ? '/Admin/dashboard.html' : '/';
+          /* Store JWT if Worker returned one; cookie auth falls through fine */
+          if (data.token) localStorage.setItem('rr_token', data.token);
+          /* Resolve root relative to current page location */
+          const here = location.pathname.replace(/\/login\.html$/, '') || '/';
+          window.location.href = data.role === 'admin' ? here + '/Admin/dashboard.html' : here + '/';
         }
       } catch {
         errEl.textContent = 'Network error. Try again.';
