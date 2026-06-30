@@ -6,4 +6,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "red-raider-loyalty"
-database_id = "REPLACE_AFTER_CREATION"
+database_id = "29155962-61b1-4fbb-9d1a-ccc3c3c30476"
+
+[triggers]
+crons = ["*/30 * * * *"]

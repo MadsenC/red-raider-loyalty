@@ -57,6 +57,7 @@ const API = {
     updateEvent:    (id,b) => api('PUT',  `/api/admin/events/${id}`,                  b,    true),
     dashboard:      (id)   => api('GET',  `/api/admin/events/${id}/dashboard`,         null, true),
     runSelection:   (id)   => api('POST', `/api/admin/events/${id}/run-selection`,     null, true),
+    allotTickets:   (id)   => api('POST', `/api/admin/events/${id}/allot-tickets`,     null, true),
     noshowSweep:    (id)   => api('POST', `/api/admin/events/${id}/noshow-sweep`,      null, true),
     students:       (q)    => api('GET',  `/api/admin/students${q ? '?q='+encodeURIComponent(q) : ''}`, null, true),
     disputes:       (s)    => api('GET',  `/api/admin/disputes?status=${s||'pending'}`,null, true),
